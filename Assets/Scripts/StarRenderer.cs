@@ -61,9 +61,7 @@ public class StarRenderer : MonoBehaviour {
 					
 			points [i].position = star.GetNormalizedPosition() * sim.radius;
 
-
-
-			points[i].startColor = new Color(Random.Range (0.0f,1.0f), Random.Range (0.0f,1.0f), Random.Range (0.0f,1.0f), 1.0f);
+			points[i].startColor = star.GetStarRGB ();
 
 
 			points [i].startSize = maxStarSize * Mathf.Pow(star.getClampedMagnitude (), exponent) + minStarSize;

@@ -54,7 +54,7 @@ public class StarModel{
 	public float mag;
 	public double? absMag;
 	public string spectrum;
-	public string colorIndex;
+	public float colorIndex;
 	public double? x;
 	public double? y;
 	public double? z;
@@ -70,6 +70,7 @@ public class StarModel{
 			float.TryParse(data [Star.RA], out ra);
 			float.TryParse(data [Star.Dec], out dec);
 			float.TryParse(data [Star.Mag], out mag );
+			float.TryParse(data [Star.ColorIndex], out colorIndex);
 			absMag = Star.AbsMag<len? Utils.toNullifiableDouble( data [Star.AbsMag] ):null ;
 			spectrum = Star.Spectrum<len? data [Star.Spectrum] :null ;
 
@@ -94,6 +95,41 @@ public class StarModel{
 		return new Vector3 (x, y, z);
 	}
 
+	public Color GetStarRGB(){
+		//RED
+		// y = -0,0921x5 + 0,3731x4 - 0,3497x3 - 0,285x2 + 0,5327x + 0,8217            
+		float red = -.0921f*Mathf.Pow(colorIndex, 5.0f ) + .3731f*Mathf.Pow(colorIndex, 4.0f) - .3497f*Mathf.Pow(colorIndex,3.0f) 
+			- .285f*Mathf.Pow(colorIndex, 2.0f) + .5327f*colorIndex + .8217f;            
+		if (red>1.0f) {
+			red = 1.0f;
+		}
+
+		//GREEN
+		//y = -0,1054x6 + 0,229x5 + 0,1235x4 - 0,3529x3 - 0,2605x2 + 0,398x + 0,8626
+		float green = -.1054f*Mathf.Pow(colorIndex, 6.0f) + .229f*Mathf.Pow(colorIndex, 5.0f ) + .1235f*Mathf.Pow(colorIndex, 4.0f) 
+			- .3529f*Mathf.Pow(colorIndex, 3.0f) - .2605f * Mathf.Pow(colorIndex, 2.0f ) + .398f*colorIndex + .8626f;           
+
+		//BLUE
+		float blue = 0.0f;
+		//for the interval [-0.40, 0.40]
+		//y = 1.0f
+		//for the interval (0.40,  1.85]
+		//y = -1,9366x6 + 12,037x5 - 30,267x4 + 39,134x3 - 27,148x2 + 9,0945x - 0,1475
+		//for the interval (1,85-2.0]
+		//y = 0.0f
+		if( colorIndex <= .40f){
+			blue = 1.0f;
+		}
+		if( colorIndex>.40 && colorIndex<=1.85f){
+			blue = -1.9366f*Mathf.Pow(colorIndex, 6.0f) + 12.037f*Mathf.Pow(colorIndex, 5.0f) - 30.267f*Mathf.Pow(colorIndex, 4.0f)
+				+ 39.134f * Mathf.Pow(colorIndex, 3.0f) -27.148f*Mathf.Pow(colorIndex, 2.0f) + 9.0945f*colorIndex - .1475f;
+		}
+		if( colorIndex>1.85f ){
+			blue = 0.0f;                
+		}
+
+		return new Color(red, green, blue);
+	}
 }
 
 
