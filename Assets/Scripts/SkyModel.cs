@@ -91,7 +91,6 @@ public class StarModel{
 		float x = Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Sin(ra*15.0f *Mathf.Deg2Rad);
 		float y = Mathf.Sin(dec *Mathf.Deg2Rad);
 		float z = -Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Cos(ra*15.0f *Mathf.Deg2Rad);
-
 		return new Vector3 (x, y, z);
 	}
 
@@ -99,7 +98,7 @@ public class StarModel{
 		//RED
 		// y = -0,0921x5 + 0,3731x4 - 0,3497x3 - 0,285x2 + 0,5327x + 0,8217            
 		float red = -.0921f*Mathf.Pow(colorIndex, 5.0f ) + .3731f*Mathf.Pow(colorIndex, 4.0f) - .3497f*Mathf.Pow(colorIndex,3.0f) 
-			- .285f*Mathf.Pow(colorIndex, 2.0f) + .5327f*colorIndex + .8217f;            
+		- .285f*Mathf.Pow(colorIndex, 2.0f) + .5327f*colorIndex + .8217f;            
 		if (red>1.0f) {
 			red = 1.0f;
 		}
