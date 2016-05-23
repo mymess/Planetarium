@@ -85,6 +85,15 @@ public class StarModel{
 	public void Log(){
 		Debug.Log (string.Format("StardId {0} {1} {2} {3} {4} {5} {6}", starID, hip, ra, dec, mag, absMag, spectrum));
 	}
+
+	public Vector3 GetNormalizedPosition(){
+		float x = Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Sin(ra*15.0f *Mathf.Deg2Rad);
+		float y = Mathf.Sin(dec *Mathf.Deg2Rad);
+		float z = -Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Cos(ra*15.0f *Mathf.Deg2Rad);
+
+		return new Vector3 (x, y, z);
+	}
+
 }
 
 

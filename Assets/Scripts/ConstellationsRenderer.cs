@@ -10,7 +10,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 
 	private static Material lineMaterial;
 
-	public Color constellationColor = Color.red;
+	public Color constellationColor = Color.green;
 
 
 	private GameObject go;
@@ -20,7 +20,6 @@ public class ConstellationsRenderer : MonoBehaviour {
 		sim = SimController.simController;
 		skyModel = sim.skyModel;
 		go = new GameObject ();
-
 	}
 
 
@@ -52,8 +51,8 @@ public class ConstellationsRenderer : MonoBehaviour {
 			foreach (int[] line in constellation.GetLines()) {
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
-				GL.Vertex (GetPosition (star1));
-				GL.Vertex (GetPosition (star2));
+				GL.Vertex (star1.GetNormalizedPosition() * sim.radius);
+				GL.Vertex (star2.GetNormalizedPosition() * sim.radius);
 			}
 
 		}
@@ -83,15 +82,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 			// Turn off depth writes
 			lineMaterial.SetInt ("_ZWrite", 0);
 		}
-	}
-
-	Vector3 GetPosition(StarModel star){
-		float x = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Sin(star.ra*15.0f *Mathf.Deg2Rad);
-		float y = Mathf.Sin(star.dec *Mathf.Deg2Rad);
-		float z = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Cos(star.ra*15.0f *Mathf.Deg2Rad);
-
-		return new Vector3 (x, y, z) * sim.radius;
-	}
+	}		
 
 
 

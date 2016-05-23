@@ -57,9 +57,9 @@ public class StarRenderer : MonoBehaviour {
 		
 			float x = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Sin(star.ra*15.0f *Mathf.Deg2Rad);
 			float y = Mathf.Sin(star.dec *Mathf.Deg2Rad);
-			float z = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Cos(star.ra*15.0f *Mathf.Deg2Rad);
+			float z = -Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Cos(star.ra*15.0f *Mathf.Deg2Rad);
 					
-			points [i].position = new Vector3 (x, y, z) * sim.radius;
+			points [i].position = star.GetNormalizedPosition() * sim.radius;
 
 
 

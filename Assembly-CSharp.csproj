@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\ConstellationLinesRenderer.cs" />
      <Compile Include="Assets\Scripts\ConstellationsRenderer.cs" />
      <Compile Include="Assets\Scripts\LineRendererTest.cs" />
      <Compile Include="Assets\Scripts\SimController.cs" />

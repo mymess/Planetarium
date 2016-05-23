@@ -80,7 +80,7 @@ public class SimController : MonoBehaviour{
 			try{
 				reverseMapping [ starmodel.hip ] = starmodel.starID - 1;
 			}catch(IndexOutOfRangeException i){
-				Debug.Log ("index --> "+ starmodel.hip);
+				//Debug.Log ("index --> "+ starmodel.hip);
 			}
 
 			stars.Add (starmodel);
