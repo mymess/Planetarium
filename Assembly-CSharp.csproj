@@ -47,12 +47,13 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ConstellationLinesRenderer.cs" />
      <Compile Include="Assets\Scripts\ConstellationsRenderer.cs" />
-     <Compile Include="Assets\Scripts\LineRendererTest.cs" />
+     <Compile Include="Assets\Scripts\MoonRenderer.cs" />
      <Compile Include="Assets\Scripts\SimController.cs" />
      <Compile Include="Assets\Scripts\SkyModel.cs" />
      <Compile Include="Assets\Scripts\SmoothMouseLook.cs" />
      <Compile Include="Assets\Scripts\StarRenderer.cs" />
      <Compile Include="Assets\Scripts\Startup.cs" />
+     <Compile Include="Assets\Scripts\SunRenderer.cs" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
  <Reference Include="UnityEngine.Networking">

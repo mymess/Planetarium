@@ -10,8 +10,8 @@ using System.Runtime.Serialization;
 using System.IO;
 using SimpleJSON;
 
-
-
+using AASharp;
+using MathUtils;
 
 
 public static class Utils{
@@ -36,27 +36,94 @@ public class SimController : MonoBehaviour{
 
 	public SkyModel skyModel;
 
+	public SunModel sun;
+	public MoonModel moon;
+
+	public MercuryModel mercury;
+	public VenusModel venus;
+	public MarsModel mars;
+	public JupiterModel jupiter;
+	public SaturnModel saturn;
+	public UranusModel uranus;
+	public NeptuneModel neptune;
+
+	public List<PlanetModel> planets;
+
+
+
 	public static SimController simController = null; 
 
 	public float radius = 800.0f;
+
+	private double lastJD;
+	private double jd;
+
+	public long year = 1987;
+	public long month = 4;
+	public long day = 10;
+
+	public long hour = 10;
+	public long minute = 0;
+	public double sec = 0.0;
+
+	public LocationData lastLocation;
+	public LocationData location;
+
+
 
 	void Awake () {
 		
 		if (simController == null) {
 			simController = this;
 		} 
+
+		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
+		jd = AASDate.DateToJD (year, month, dayDec, true);
+		location = new LocationData (10.0, 10.0,100);
+
+
 		skyModel = gameObject.GetComponent<SkyModel>();
-
 		ParseStarsRaw ();
-
-
 		ParseConstellations ();
+
+		SetupSolarSystem ();
+
 	}
-	
+
+	void Start(){
+		
+
+	}
 
 	void Update () {
 		
 	}
+
+
+	public bool IsUpdated(){
+		return lastJD != jd || !lastLocation.Equals (location);
+	}
+
+	private void SetupSolarSystem(){
+		sun = new SunModel (jd, location);
+		moon = new MoonModel (jd, location);
+		mercury = new MercuryModel (jd, location);
+		venus = new VenusModel(jd, location);
+		mars = new MarsModel (jd, location);
+		jupiter = new JupiterModel (jd, location);
+		uranus = new UranusModel(jd, location);
+		neptune = new NeptuneModel(jd, location);
+
+		planets = new List<PlanetModel> ();
+		planets.Add (mercury);
+		planets.Add (venus);
+		planets.Add (mars);
+		planets.Add (jupiter);
+		planets.Add (saturn);
+		planets.Add (uranus);
+		planets.Add (neptune);
+	}
+
 
 	private void ParseStarsRaw(){
 		
@@ -121,6 +188,13 @@ public class SimController : MonoBehaviour{
 	}
 
 
+	public double GetJD(){
+		return jd;
+	}
+
+	public LocationData GetLocation(){
+		return location;
+	}
 
 
 }
