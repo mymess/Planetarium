@@ -44,3 +44,24 @@ Thumbs.db
 *.mdb
 
 /Temp
+/Library/metadata/*
+
+*.mdb
+
+*.dll
+
+*.mdb
+
+*.log
+
+*.mdb
+
+*.log
+
+*.dll
+
+Library/metadata/00/00000000000000004000000000000000
+
+Library/metadata/00/00000000000000006100000000000000
+
+*.mdb

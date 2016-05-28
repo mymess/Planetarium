@@ -17,7 +17,7 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 
 	void Start () {
-		sim = SimController.simController;
+		sim = SimController.instance;
 		skyModel = sim.skyModel;
 
 		DrawConstellations ();
@@ -27,13 +27,13 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 		CreateLineMaterial ();
 
-		foreach (Constellation constellation in sim.skyModel.getConstellations()) {
+		foreach (Constellation constellation in sim.skyModel.GetConstellations()) {
 			GameObject goConst = new GameObject ();
 			goConst.transform.parent = gameObject.transform;
 			goConst.name = constellation.GetAbbr ();
 
-			List<StarModel> stars = skyModel.getStars ();
-			int[] reverseMapping = skyModel.getReverseMapping ();
+			List<StarModel> stars = skyModel.GetStars ();
+			int[] reverseMapping = skyModel.GetReverseMapping ();
 			int i = 0;
 			foreach(int[] line in constellation.GetLines()){
 

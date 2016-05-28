@@ -36,22 +36,9 @@ public class SimController : MonoBehaviour{
 
 	public SkyModel skyModel;
 
-	public SunModel sun;
-	public MoonModel moon;
+	public Dictionary<string, PlanetModel> planets;
 
-	public MercuryModel mercury;
-	public VenusModel venus;
-	public MarsModel mars;
-	public JupiterModel jupiter;
-	public SaturnModel saturn;
-	public UranusModel uranus;
-	public NeptuneModel neptune;
-
-	public List<PlanetModel> planets;
-
-
-
-	public static SimController simController = null; 
+	public static SimController instance = null; 
 
 	public float radius = 800.0f;
 
@@ -66,6 +53,9 @@ public class SimController : MonoBehaviour{
 	public long minute = 0;
 	public double sec = 0.0;
 
+	public double longitude = 40.0;
+	public double latitude = 0;
+
 	public LocationData lastLocation;
 	public LocationData location;
 
@@ -73,20 +63,23 @@ public class SimController : MonoBehaviour{
 
 	void Awake () {
 		
-		if (simController == null) {
-			simController = this;
+		if (instance == null) {
+			instance = this;
 		} 
 
 		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
-		location = new LocationData (10.0, 10.0,100);
-
+		location = new LocationData (longitude, latitude, 100);
+		lastLocation = new LocationData (longitude, latitude, 100);
 
 		skyModel = gameObject.GetComponent<SkyModel>();
+
+		SetupSolarSystem ();
+
 		ParseStarsRaw ();
 		ParseConstellations ();
 
-		SetupSolarSystem ();
+
 
 	}
 
@@ -98,30 +91,40 @@ public class SimController : MonoBehaviour{
 	void Update () {
 		
 	}
-
+		
 
 	public bool IsUpdated(){
-		return lastJD != jd || !lastLocation.Equals (location);
+		return false; //lastJD != jd || !lastLocation.Equals (location);
 	}
 
 	private void SetupSolarSystem(){
-		sun = new SunModel (jd, location);
-		moon = new MoonModel (jd, location);
-		mercury = new MercuryModel (jd, location);
-		venus = new VenusModel(jd, location);
-		mars = new MarsModel (jd, location);
-		jupiter = new JupiterModel (jd, location);
-		uranus = new UranusModel(jd, location);
-		neptune = new NeptuneModel(jd, location);
+		SunModel sun              = new SunModel (jd, location);
+		MoonModel moon        	  = new MoonModel (jd, location);
+		MercuryModel mercuryModel = new MercuryModel (jd, location);
+		VenusModel venusModel     = new VenusModel(jd, location);
+		MarsModel marsModel       = new MarsModel (jd, location);
+		JupiterModel jupiterModel = new JupiterModel (jd, location);
+		SaturnModel saturnModel   = new SaturnModel (jd, location);
+		UranusModel uranusModel   = new UranusModel(jd, location);
+		NeptuneModel neptuneModel = new NeptuneModel(jd, location);
 
-		planets = new List<PlanetModel> ();
-		planets.Add (mercury);
-		planets.Add (venus);
-		planets.Add (mars);
-		planets.Add (jupiter);
-		planets.Add (saturn);
-		planets.Add (uranus);
-		planets.Add (neptune);
+		planets = new Dictionary<string, PlanetModel> ();
+		planets["Mercury"] = mercuryModel;
+		planets["Venus"]   = venusModel;
+		planets["Mars"]    = marsModel;
+		planets["Jupiter"] = jupiterModel;
+		planets["Saturn"]  = saturnModel;
+		planets["Uranus"]  = uranusModel;
+		planets["Neptune"] = neptuneModel;
+
+		skyModel.SetPlanets (planets);
+		skyModel.SetSun (sun);
+		skyModel.SetMoon (moon);
+
+	}
+
+	public static bool IsReady(){
+		return instance != null;
 	}
 
 
@@ -153,9 +156,9 @@ public class SimController : MonoBehaviour{
 			stars.Add (starmodel);
 		}
 
-		skyModel.setStars (stars);
+		skyModel.SetStars (stars);
 
-		skyModel.setReverseMapping (reverseMapping);
+		skyModel.SetReverseMapping (reverseMapping);
 	}
 
 
@@ -184,7 +187,7 @@ public class SimController : MonoBehaviour{
 		}
 
 
-		skyModel.setConstellations (constellations);
+		skyModel.SetConstellations (constellations);
 	}
 
 

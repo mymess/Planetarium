@@ -34,7 +34,7 @@ public class StarRenderer : MonoBehaviour {
 		ParticleEmitter emitter = ps.GetComponent<ParticleEmitter> ();
 
 
-		sim = SimController.simController;
+		sim = SimController.instance;
 
 		skyModel = sim.skyModel;
 
@@ -46,14 +46,14 @@ public class StarRenderer : MonoBehaviour {
 
 	void CreatePoints(){
 		
-		points = new ParticleSystem.Particle[ skyModel.getStars().Count ];
+		points = new ParticleSystem.Particle[ skyModel.GetStars().Count ];
 
 
 		currentRadius = sim.radius;
 		currentStarSize = maxStarSize;
 
-		for(int i = 0; i < skyModel.getStars().Count; i++){
-			StarModel star = skyModel.getStars () [i];
+		for(int i = 0; i < skyModel.GetStars().Count; i++){
+			StarModel star = skyModel.GetStars () [i];
 		
 			float x = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Sin(star.ra*15.0f *Mathf.Deg2Rad);
 			float y = Mathf.Sin(star.dec *Mathf.Deg2Rad);

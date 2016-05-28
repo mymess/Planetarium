@@ -12,9 +12,9 @@ public class SunRenderer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		sim = SimController.simController;
+		sim = SimController.instance;
 
-		sun = sim.sun;
+		sun = sim.skyModel.GetSun();
 
 		float size = transform.localScale.magnitude;
 		float diameter = (float)sun.GetDiameter ();

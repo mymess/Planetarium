@@ -17,7 +17,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		sim = SimController.simController;
+		sim = SimController.instance;
 		skyModel = sim.skyModel;
 		go = new GameObject ();
 	}
@@ -40,14 +40,14 @@ public class ConstellationsRenderer : MonoBehaviour {
 		GL.MultMatrix (zero.worldToLocalMatrix);
 
 
-		List<StarModel> stars = skyModel.getStars ();
-		int[] reverseMapping = skyModel.getReverseMapping ();
+		List<StarModel> stars = skyModel.GetStars ();
+		int[] reverseMapping = skyModel.GetReverseMapping ();
 
 		GL.PushMatrix ();
 		GL.Begin( GL.LINES );
 
 		GL.Color( constellationColor );
-		foreach (Constellation constellation in skyModel.getConstellations()) {
+		foreach (Constellation constellation in skyModel.GetConstellations()) {
 			foreach (int[] line in constellation.GetLines()) {
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];

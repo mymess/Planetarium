@@ -182,39 +182,36 @@ public class Constellation{
 [Serializable]
 public class SkyModel : MonoBehaviour {
 
-	private List<StarModel> stars;
+	private List<StarModel> stars;// { get; set;}
 
-	//reverse Mapping HIP->index
+	//reverse Mapping HIP index -> array index (used in constellations rendering)
 	private int[] reverseMapping;
 
-	private List<Constellation> constellations;
+	private List<Constellation> constellations;// { get; set;} 
+
+	private Dictionary<string, PlanetModel> planets;
+
+	private SunModel sun;
+
+	private MoonModel moon;
 
 
+	public List<StarModel> GetStars(){ return stars; }
+	public void SetStars(List<StarModel> stars){ this.stars = stars; }
 
-	public List<StarModel> getStars(){
-		return stars;
-	}
+	public int[] GetReverseMapping(){ return reverseMapping; }
+	public void SetReverseMapping(int[] reverseMapping){ this.reverseMapping = reverseMapping; }
 
-	public void setStars(List<StarModel> stars){
-		this.stars = stars;
-	}
+	public List<Constellation> GetConstellations(){ return constellations; }
+	public void SetConstellations(List<Constellation> constellations){ this.constellations = constellations; }
 
-	public int[] getReverseMapping(){
-		return reverseMapping;
-	}
-
-	public void setReverseMapping( int[] reverseMapping){
-		this.reverseMapping = reverseMapping;
-	}
+	public Dictionary<string, PlanetModel> GetPlanets(){ return planets; }
+	public void SetPlanets(Dictionary<string, PlanetModel> planets){ this.planets = planets; }
 
 
-	public List<Constellation> getConstellations(){
-		return constellations;
-	}
+	public SunModel GetSun(){ return sun; }
+	public void SetSun(SunModel sun){ this.sun = sun; }
 
-	public void setConstellations(List<Constellation> constellations){
-		this.constellations = constellations;
-		
-	}
-
+	public MoonModel GetMoon(){ return moon; }
+	public void SetMoon(MoonModel moon){ this.moon = moon; }
 }
