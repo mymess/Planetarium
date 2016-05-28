@@ -27,11 +27,11 @@ public abstract class PlanetRenderer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	void Update () {		
+		SetPosition ();
 	}
 
-	void SetPosition(){
+	public void SetPosition(){
 		try{
 			Vec3D v = model.GetRectangularLocalPosition ();
 			gameObject.transform.position = new Vector3 ((float)v.x,(float) v.y,(float) v.z) * distance;

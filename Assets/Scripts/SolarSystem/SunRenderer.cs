@@ -27,7 +27,7 @@ public class SunRenderer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
 	void SetPosition(){

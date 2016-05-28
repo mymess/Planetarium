@@ -14,22 +14,6 @@ using AASharp;
 using MathUtils;
 
 
-public static class Utils{
-	public static int? toNullifiableInt32(string s){
-		int i;
-		if (Int32.TryParse(s, out i)) return i;
-		return null;
-	}
-
-	public static double? toNullifiableDouble(string s){
-		double f;
-		if (Double.TryParse (s, out f))
-			return f;
-		return null;
-	}
-
-}
-
 
 
 public class SimController : MonoBehaviour{
@@ -55,6 +39,7 @@ public class SimController : MonoBehaviour{
 
 	public double longitude = 40.0;
 	public double latitude = 0;
+	public double altitude = 100;
 
 	public LocationData lastLocation;
 	public LocationData location;
@@ -69,13 +54,16 @@ public class SimController : MonoBehaviour{
 
 		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
-		location = new LocationData (longitude, latitude, 100);
-		lastLocation = new LocationData (longitude, latitude, 100);
+		lastJD = jd;
+		location = new LocationData (longitude, latitude, altitude);
+		lastLocation = new LocationData (longitude, latitude, altitude);
 
 		skyModel = gameObject.GetComponent<SkyModel>();
 
+		//solar system
 		SetupSolarSystem ();
 
+		//stars
 		ParseStarsRaw ();
 		ParseConstellations ();
 
@@ -89,12 +77,32 @@ public class SimController : MonoBehaviour{
 	}
 
 	void Update () {
-		
+		if (IsUpdated()) {
+
+
+			UpdateModel ();
+
+			lastJD = jd;
+			lastLocation = location;
+		}
 	}
-		
+
+	void UpdateModel(){
+		foreach (KeyValuePair<string, PlanetModel> pair in skyModel.GetPlanets()) {
+			pair.Value.Update(jd, location);
+		}
+
+		skyModel.GetSun ().Update (jd, location);
+		skyModel.GetMoon ().Update (jd, location);
+	}
+
 
 	public bool IsUpdated(){
-		return false; //lastJD != jd || !lastLocation.Equals (location);
+		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
+		jd = AASDate.DateToJD (year, month, dayDec, true);
+
+		location = new LocationData (longitude, latitude, altitude);
+		return lastJD != jd || !lastLocation.Equals (location);
 	}
 
 	private void SetupSolarSystem(){

@@ -52,7 +52,7 @@ public class StarModel{
 	public double? pmdecc;
 	public double? rv;
 	public float mag;
-	public double? absMag;
+	public float absMag;
 	public string spectrum;
 	public float colorIndex;
 	public double? x;
@@ -71,7 +71,7 @@ public class StarModel{
 			float.TryParse(data [Star.Dec], out dec);
 			float.TryParse(data [Star.Mag], out mag );
 			float.TryParse(data [Star.ColorIndex], out colorIndex);
-			absMag = Star.AbsMag<len? Utils.toNullifiableDouble( data [Star.AbsMag] ):null ;
+			float.TryParse(data [Star.AbsMag], out absMag ) ;
 			spectrum = Star.Spectrum<len? data [Star.Spectrum] :null ;
 
 		}catch(FormatException pe){
@@ -205,8 +205,8 @@ public class SkyModel : MonoBehaviour {
 	public List<Constellation> GetConstellations(){ return constellations; }
 	public void SetConstellations(List<Constellation> constellations){ this.constellations = constellations; }
 
-	public Dictionary<string, PlanetModel> GetPlanets(){ return planets; }
-	public void SetPlanets(Dictionary<string, PlanetModel> planets){ this.planets = planets; }
+	public Dictionary<string, PlanetModel>  GetPlanets(){ return planets; }
+	public void SetPlanets(Dictionary<string, PlanetModel>  planets){ this.planets = planets; }
 
 
 	public SunModel GetSun(){ return sun; }

@@ -27,11 +27,8 @@ public class MoonRenderer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (sim.IsUpdated ()) {
-			SetPosition ();
-			SetScale ();
-		}
+	void Update () {		
+		SetPosition ();
 	}
 
 
