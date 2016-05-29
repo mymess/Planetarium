@@ -36,6 +36,8 @@ public class StarRenderer : MonoBehaviour {
 
 		sim = SimController.instance;
 
+
+
 		skyModel = sim.skyModel;
 
 
@@ -92,4 +94,9 @@ public class StarRenderer : MonoBehaviour {
 
 		ps.SetParticles(points, points.Length);
 	}
+
+	void UpdateStars(double jd ){
+		
+	}
+
 }

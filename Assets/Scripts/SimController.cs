@@ -14,8 +14,6 @@ using AASharp;
 using MathUtils;
 
 
-
-
 public class SimController : MonoBehaviour{
 
 	public SkyModel skyModel;
@@ -44,7 +42,8 @@ public class SimController : MonoBehaviour{
 	public LocationData lastLocation;
 	public LocationData location;
 
-
+	public bool playMode = true;
+	public float timeScale = .5f;
 
 	void Awake () {
 		
@@ -58,10 +57,10 @@ public class SimController : MonoBehaviour{
 		location = new LocationData (longitude, latitude, altitude);
 		lastLocation = new LocationData (longitude, latitude, altitude);
 
-		skyModel = gameObject.GetComponent<SkyModel>();
+		skyModel = new SkyModel(jd, location);
 
 		//solar system
-		SetupSolarSystem ();
+		//SetupSolarSystem ();
 
 		//stars
 		ParseStarsRaw ();
@@ -77,59 +76,34 @@ public class SimController : MonoBehaviour{
 	}
 
 	void Update () {
-		if (IsUpdated()) {
+		if (playMode) {
+			jd += timeScale * Time.deltaTime / 86400f;
+			skyModel.Update (jd, location);
+		} else {
+			if (IsUpdated ()) {
+				skyModel.Update (jd, location);
 
-
-			UpdateModel ();
-
-			lastJD = jd;
-			lastLocation = location;
+				lastJD = jd;
+				lastLocation = location;
+			}
 		}
 	}
 
-	void UpdateModel(){
-		foreach (KeyValuePair<string, PlanetModel> pair in skyModel.GetPlanets()) {
-			pair.Value.Update(jd, location);
-		}
 
-		skyModel.GetSun ().Update (jd, location);
-		skyModel.GetMoon ().Update (jd, location);
-	}
 
 
 	public bool IsUpdated(){
 		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
 
-		location = new LocationData (longitude, latitude, altitude);
+		location.longitude = longitude;
+		location.latitude = latitude;
+		location.altitude = altitude;
+
 		return lastJD != jd || !lastLocation.Equals (location);
 	}
 
-	private void SetupSolarSystem(){
-		SunModel sun              = new SunModel (jd, location);
-		MoonModel moon        	  = new MoonModel (jd, location);
-		MercuryModel mercuryModel = new MercuryModel (jd, location);
-		VenusModel venusModel     = new VenusModel(jd, location);
-		MarsModel marsModel       = new MarsModel (jd, location);
-		JupiterModel jupiterModel = new JupiterModel (jd, location);
-		SaturnModel saturnModel   = new SaturnModel (jd, location);
-		UranusModel uranusModel   = new UranusModel(jd, location);
-		NeptuneModel neptuneModel = new NeptuneModel(jd, location);
 
-		planets = new Dictionary<string, PlanetModel> ();
-		planets["Mercury"] = mercuryModel;
-		planets["Venus"]   = venusModel;
-		planets["Mars"]    = marsModel;
-		planets["Jupiter"] = jupiterModel;
-		planets["Saturn"]  = saturnModel;
-		planets["Uranus"]  = uranusModel;
-		planets["Neptune"] = neptuneModel;
-
-		skyModel.SetPlanets (planets);
-		skyModel.SetSun (sun);
-		skyModel.SetMoon (moon);
-
-	}
 
 	public static bool IsReady(){
 		return instance != null;

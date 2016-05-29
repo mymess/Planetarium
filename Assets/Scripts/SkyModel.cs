@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System;
 
+using MathUtils;
 
 [Serializable]
 public class Star{
@@ -88,10 +89,16 @@ public class StarModel{
 	}
 
 	public Vector3 GetNormalizedPosition(){
-		float x = Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Sin(ra*15.0f *Mathf.Deg2Rad);
-		float y = Mathf.Sin(dec *Mathf.Deg2Rad);
-		float z = -Mathf.Cos(dec *Mathf.Deg2Rad) * Mathf.Cos(ra*15.0f *Mathf.Deg2Rad);
+		float x = Mathf.Cos(dec * Mathf.Deg2Rad) * Mathf.Sin(ra*15.0f *Mathf.Deg2Rad);
+		float y = Mathf.Sin(dec * Mathf.Deg2Rad);
+		float z = -Mathf.Cos(dec * Mathf.Deg2Rad) * Mathf.Cos(ra*15.0f *Mathf.Deg2Rad);
 		return new Vector3 (x, y, z);
+	}
+
+
+	public LocalCoords GetLocalCoordinates(){
+		//TODO: implement this
+		return new LocalCoords ();
 	}
 
 	public Color GetStarRGB(){
@@ -179,8 +186,8 @@ public class Constellation{
 
 }
 
-[Serializable]
-public class SkyModel : MonoBehaviour {
+
+public class SkyModel  {
 
 	private List<StarModel> stars;// { get; set;}
 
@@ -194,6 +201,40 @@ public class SkyModel : MonoBehaviour {
 	private SunModel sun;
 
 	private MoonModel moon;
+
+
+	public SkyModel(double jd, LocationData location){
+		sun               = new SunModel (jd, location);
+		moon        	  = new MoonModel (jd, location);
+		MercuryModel mercuryModel = new MercuryModel (jd, location);
+		VenusModel venusModel     = new VenusModel(jd, location);
+		MarsModel marsModel       = new MarsModel (jd, location);
+		JupiterModel jupiterModel = new JupiterModel (jd, location);
+		SaturnModel saturnModel   = new SaturnModel (jd, location);
+		UranusModel uranusModel   = new UranusModel(jd, location);
+		NeptuneModel neptuneModel = new NeptuneModel(jd, location);
+
+		planets = new Dictionary<string, PlanetModel> ();
+		planets["Mercury"] = mercuryModel;
+		planets["Venus"]   = venusModel;
+		planets["Mars"]    = marsModel;
+		planets["Jupiter"] = jupiterModel;
+		planets["Saturn"]  = saturnModel;
+		planets["Uranus"]  = uranusModel;
+		planets["Neptune"] = neptuneModel;
+
+
+	}
+
+
+	public void Update(double jd, LocationData location){
+		foreach (KeyValuePair<string, PlanetModel> pair in planets) {
+			pair.Value.Update(jd, location);
+		}
+
+		sun.Update (jd, location);
+		moon.Update (jd, location);
+	}
 
 
 	public List<StarModel> GetStars(){ return stars; }

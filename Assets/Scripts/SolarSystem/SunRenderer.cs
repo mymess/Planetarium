@@ -9,35 +9,33 @@ public class SunRenderer : MonoBehaviour {
 
 	private SimController sim;
 
+	private float distance;
+
 	// Use this for initialization
 	void Start () {
 
 		sim = SimController.instance;
+		distance = .8f * sim.radius;
 
 		sun = sim.skyModel.GetSun();
 
-		float size = transform.localScale.magnitude;
+		float size = 60.0f;//transform.localScale.magnitude;
 		float diameter = (float)sun.GetDiameter ();
-		transform.localScale = new Vector3 (size*diameter, size*diameter, size*diameter);
+		transform.localScale = new Vector3 (size, size, size);
 
 
 		SetPosition ();
 
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-		
+		SetPosition ();
 	}
 
 	void SetPosition(){
-		Vec3D pos = sun.GetRectangularLocalPosition ();
-		float x = .5f*sim.radius*(float)pos.x;
-		float y = .5f*sim.radius*(float)pos.y;
-		float z = .5f*sim.radius*(float)pos.z;
-
-		//transform.position = new Vector3(x, y, z);
-		gameObject.transform.position = new Vector3(x, y, z);
+		
+		Vec3D v = sun.GetRectangularLocalPosition ();
+		gameObject.transform.position = new Vector3 ((float)v.x,(float) v.y,(float) v.z) * distance;
 	}
 
 

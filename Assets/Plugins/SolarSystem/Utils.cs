@@ -141,6 +141,14 @@ namespace MathUtils{
 	public class LocalCoords{
 		public DegreesAngle Azimuth = new DegreesAngle();
 		public DegreesAngle Altitude = new DegreesAngle();
+
+		public LocalCoords(){
+		}
+
+		public LocalCoords(DegreesAngle az, DegreesAngle alt){
+			this.Azimuth = az;
+			this.Altitude = alt;
+		}
 	}
 
 
