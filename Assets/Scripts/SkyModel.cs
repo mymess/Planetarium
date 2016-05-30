@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System;
 
+using AASharp;
 using MathUtils;
 
 [Serializable]
@@ -63,6 +64,10 @@ public class StarModel{
 	public double? vy;
 	public double? vz;
 
+	//local coords
+	public double az;
+	public double alt;
+
 	public StarModel(string[] data){
 		try{
 			int len = data.Length;
@@ -95,10 +100,34 @@ public class StarModel{
 		return new Vector3 (x, y, z);
 	}
 
+	public Vector3 GetEquatorialRectangularCoords(){
+		/*
+		double x = Math.Cos(dec * M.DEG2RAD) * Math.Sin(ra*15.0d *M.DEG2RAD);
+		double y = Math.Sin(dec * M.DEG2RAD);
+		double z = -Math.Cos(dec * M.DEG2RAD) * Math.Cos(ra*15.0d *M.DEG2RAD);
+		*/
+		float x = Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Sin((float)ra*15.0f *Mathf.Deg2Rad);
+		float y = Mathf.Sin((float)dec * Mathf.Deg2Rad);
+		float z = -Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Cos((float)ra*15.0f *Mathf.Deg2Rad);
+		//return new Vector3 ((float)x, (float) y, (float) z);
+		return new Vector3 (x, y, z);
+	}
 
-	public LocalCoords GetLocalCoordinates(){
-		//TODO: implement this
-		return new LocalCoords ();
+
+	public Vector3 GetLocalRectangularCoordinates(double jd, LocationData location){
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+
+		//hour angle in hours
+		double H = theta0Apparent - location.longitude/15d - this.ra;
+
+		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (H, this.dec, location.latitude);
+		double az = local.X;
+		double alt = local.Y;
+		double x = Math.Cos(alt * M.DEG2RAD) * Math.Sin(az*15.0f *M.DEG2RAD);
+		double y = Math.Sin(alt * M.DEG2RAD);
+		double z = -Math.Cos(alt * M.DEG2RAD) * Math.Cos(az*15.0f *M.DEG2RAD);
+
+		return new Vector3( (float)x, (float)y, (float)z );
 	}
 
 	public Color GetStarRGB(){
@@ -235,6 +264,21 @@ public class SkyModel  {
 		sun.Update (jd, location);
 		moon.Update (jd, location);
 	}
+
+
+
+
+	public static EquatorialCoords Horizontal2Equatorial(double azimuth, double altitude, double latitude){
+		AAS2DCoordinate coords = AASCoordinateTransformation.Horizontal2Equatorial (azimuth, altitude, latitude);
+		return new EquatorialCoords(new HourAngle(coords.X), new DegreesAngle( coords.Y ));
+	}
+
+	public static LocalCoords Rectangular2Horizontal(double x, double y, double z){
+		double az = Math.Atan2 (x, z) * M.RAD2DEG;
+		double alt = Math.Atan2 (y, Math.Sqrt (x * x + z * z)) *M.RAD2DEG;
+		return new LocalCoords (new DegreesAngle (az), new DegreesAngle (alt));
+	}
+		
 
 
 	public List<StarModel> GetStars(){ return stars; }

@@ -70,9 +70,9 @@ namespace MathUtils{
 
 		public override  string ToString(){
 			return string.Format ("{0}h {1}m {2}s", 
-				Hours().ToString().PadLeft(2,'0'), 
+				Hours().ToString("00").PadLeft(2,'0'), 
 				Minutes().ToString().PadLeft(2,'0'), 
-				Seconds().ToString().PadLeft(2,'0'));
+				Math.Round(Seconds(), 2).ToString("00.00"));
 		}
 	}
 
@@ -125,16 +125,24 @@ namespace MathUtils{
 
 
 		public override string ToString(){
-			return string.Format ("{0}º {1}' {2}\"", 
-				Degrees().ToString().PadLeft(2,'0'), 
+			return string.Format ("{0:D2}º {1:D2}' {2:D2}\"", 
+				Degrees().ToString("00").PadLeft(2,'0'), 
 				Minutes().ToString().PadLeft(2,'0'), 
-				Seconds().ToString().PadLeft(2,'0'));
+				Math.Round(Seconds(), 2).ToString("00.00"));
 		}
 	}
 
 	public class EquatorialCoords{
 		public HourAngle RA = new HourAngle();
 		public DegreesAngle Declination = new DegreesAngle();
+
+		public EquatorialCoords(){
+		}
+
+		public EquatorialCoords (HourAngle ra, DegreesAngle dec){
+			RA = ra;
+			Declination = dec;
+		}
 
 	}
 

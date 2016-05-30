@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using MathUtils;
+
 public class ConstellationsRenderer : MonoBehaviour {
 
 	private SimController sim ;
@@ -32,6 +34,11 @@ public class ConstellationsRenderer : MonoBehaviour {
 		CreateLineMaterial ();
 		lineMaterial.SetPass( 0 );
 
+
+		double jd = SimController.instance.GetJD ();
+		LocationData location = SimController.instance.location;
+
+
 		Transform zero = go.transform;
 		zero.position = Vector3.zero;
 		zero.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
@@ -51,8 +58,8 @@ public class ConstellationsRenderer : MonoBehaviour {
 			foreach (int[] line in constellation.GetLines()) {
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
-				GL.Vertex (star1.GetNormalizedPosition() * sim.radius);
-				GL.Vertex (star2.GetNormalizedPosition() * sim.radius);
+				GL.Vertex (star1.GetEquatorialRectangularCoords()  * sim.radius);
+				GL.Vertex (star2.GetEquatorialRectangularCoords() * sim.radius);
 			}
 
 		}

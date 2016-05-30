@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 using MathUtils;
 
@@ -33,11 +34,14 @@ public class MoonRenderer : MonoBehaviour {
 
 
 	void SetPosition(){
-		Vec3D pos = moon.GetRectangularLocalPosition ();
-		float x = .5f*sim.radius*(float)pos.x;
-		float y = .5f*sim.radius*(float)pos.y;
-		float z = .5f*sim.radius*(float)pos.z;
-		gameObject.transform.position = new Vector3 (x, y, z);
+		try{
+			Vec3D pos = sim.skyModel.GetMoon().GetRectangularLocalPosition ();
+			float x = .5f*sim.radius*(float)pos.x;
+			float y = .5f*sim.radius*(float)pos.y;
+			float z = .5f*sim.radius*(float)pos.z;
+			gameObject.transform.position = new Vector3 (x, y, z);
+		}catch(NullReferenceException n){
+		}
 	}
 
 	void SetScale(){

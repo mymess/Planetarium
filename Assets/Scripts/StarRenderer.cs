@@ -2,7 +2,7 @@
 
 using System.Collections;
 
-
+using MathUtils;
 
 public class StarRenderer : MonoBehaviour {
 
@@ -36,8 +36,6 @@ public class StarRenderer : MonoBehaviour {
 
 		sim = SimController.instance;
 
-
-
 		skyModel = sim.skyModel;
 
 
@@ -57,11 +55,8 @@ public class StarRenderer : MonoBehaviour {
 		for(int i = 0; i < skyModel.GetStars().Count; i++){
 			StarModel star = skyModel.GetStars () [i];
 		
-			float x = Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Sin(star.ra*15.0f *Mathf.Deg2Rad);
-			float y = Mathf.Sin(star.dec *Mathf.Deg2Rad);
-			float z = -Mathf.Cos(star.dec *Mathf.Deg2Rad) * Mathf.Cos(star.ra*15.0f *Mathf.Deg2Rad);
-					
-			points [i].position = star.GetNormalizedPosition() * sim.radius;
+
+			points[i].position = star.GetNormalizedPosition() * sim.radius;
 
 			points[i].startColor = star.GetStarRGB ();
 
@@ -80,6 +75,9 @@ public class StarRenderer : MonoBehaviour {
 		ps.SetParticles (points, points.Length);
 
 
+
+
+
 	}
 	
 	// Update is called once per frame
@@ -88,15 +86,15 @@ public class StarRenderer : MonoBehaviour {
 			return;
 		}
 
-		if (currentStarSize != maxStarSize) {
-			CreatePoints ();
-		}
+
+		//CreatePoints ();
 
 		ps.SetParticles(points, points.Length);
 	}
 
-	void UpdateStars(double jd ){
-		
+	void UpdateStars(){
+		double jd = SimController.instance.GetJD ();
+		LocationData location = SimController.instance.GetLocation ();
 	}
 
 }

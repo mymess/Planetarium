@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using MathUtils;
 
 public class ConstellationLinesRenderer : MonoBehaviour {
 
@@ -26,6 +27,8 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 	void DrawConstellations(){
 
 		CreateLineMaterial ();
+		double jd = SimController.instance.GetJD ();
+		LocationData location = SimController.instance.location;
 
 		foreach (Constellation constellation in sim.skyModel.GetConstellations()) {
 			GameObject goConst = new GameObject ();
@@ -49,8 +52,8 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
 
-				renderer.SetPosition(0, star1.GetNormalizedPosition () * (sim.radius+1.0f));
-				renderer.SetPosition(1, star2.GetNormalizedPosition () * (sim.radius+1.0f));
+				renderer.SetPosition(0, star1.GetNormalizedPosition () * (sim.radius + 1.0f));
+				renderer.SetPosition(1, star2.GetNormalizedPosition () * (sim.radius + 1.0f));
 				++i;
 			}
 		}

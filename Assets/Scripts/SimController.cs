@@ -39,11 +39,16 @@ public class SimController : MonoBehaviour{
 	public double latitude = 0;
 	public double altitude = 100;
 
-	public LocationData lastLocation;
+	private LocationData lastLocation;
 	public LocationData location;
 
 	public bool playMode = true;
 	public float timeScale = .5f;
+
+
+	public GUIText RAText;
+
+
 
 	void Awake () {
 		
@@ -59,9 +64,6 @@ public class SimController : MonoBehaviour{
 
 		skyModel = new SkyModel(jd, location);
 
-		//solar system
-		//SetupSolarSystem ();
-
 		//stars
 		ParseStarsRaw ();
 		ParseConstellations ();
@@ -76,17 +78,23 @@ public class SimController : MonoBehaviour{
 	}
 
 	void Update () {
+		location.latitude  = latitude;
+		location.longitude = longitude;
+		location.altitude  = altitude;
+
 		if (playMode) {
 			jd += timeScale * Time.deltaTime / 86400f;
+
 			skyModel.Update (jd, location);
 		} else {
 			if (IsUpdated ()) {
 				skyModel.Update (jd, location);
-
-				lastJD = jd;
-				lastLocation = location;
 			}
 		}
+
+		lastJD = jd;
+		lastLocation = location;
+
 	}
 
 
@@ -95,10 +103,6 @@ public class SimController : MonoBehaviour{
 	public bool IsUpdated(){
 		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
-
-		location.longitude = longitude;
-		location.latitude = latitude;
-		location.altitude = altitude;
 
 		return lastJD != jd || !lastLocation.Equals (location);
 	}
@@ -180,6 +184,6 @@ public class SimController : MonoBehaviour{
 	public LocationData GetLocation(){
 		return location;
 	}
-
+		
 
 }
