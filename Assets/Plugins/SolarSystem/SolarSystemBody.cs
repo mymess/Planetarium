@@ -34,7 +34,7 @@ public abstract class SolarSystemBody{
 
 
 	public Vec3D GetRectangularLocalPosition(){
-		double az = localCoords.Azimuth.Get ();
+		double az  = localCoords.Azimuth.Get ();
 		double alt = localCoords.Altitude.Get ();
 
 		Vec3D ret = new Vec3D ();

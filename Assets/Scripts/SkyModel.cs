@@ -232,7 +232,13 @@ public class SkyModel  {
 	private MoonModel moon;
 
 
+	private LocationData location;
+	private double jd;
+
+
 	public SkyModel(double jd, LocationData location){
+		this.location = location;
+
 		sun               = new SunModel (jd, location);
 		moon        	  = new MoonModel (jd, location);
 		MercuryModel mercuryModel = new MercuryModel (jd, location);
@@ -255,8 +261,25 @@ public class SkyModel  {
 
 	}
 
+	public double GetJD(){
+		return jd;
+	}
+
+	public LocationData GetLocation(){
+		return location;
+	}
+
+	public Vector3 GetEarthAxis(){
+		double colatitude = 90.0d - location.latitude;
+		double y = Math.Cos (colatitude * M.DEG2RAD);
+		double z = Math.Sin (colatitude * M.DEG2RAD);
+		return new Vector3(0.0f, (float)y, (float)z);
+	}
 
 	public void Update(double jd, LocationData location){
+		this.jd = jd;
+		this.location = location;
+
 		foreach (KeyValuePair<string, PlanetModel> pair in planets) {
 			pair.Value.Update(jd, location);
 		}
@@ -266,6 +289,15 @@ public class SkyModel  {
 	}
 
 
+	//hour angle of the aries point
+	public double GetHourAngleOfAriesPoint(){
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+
+		//hour angle in hours
+		double H = theta0Apparent - location.longitude/15d;
+
+		return H;
+	}
 
 
 	public static EquatorialCoords Horizontal2Equatorial(double azimuth, double altitude, double latitude){

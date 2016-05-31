@@ -99,11 +99,13 @@ namespace MathUtils{
 			return degrees;
 		}
 
+		public double To0To360Range(){
+			return AASCoordinateTransformation.MapTo0To360Range (degrees);
+		}
+
 		public static DegreesAngle FromDecimalTo0To360Range(double deg){
 			deg = AASCoordinateTransformation.MapTo0To360Range (deg);
-
 			return new DegreesAngle(deg);
-
 		}
 
 		public long Degrees(){
@@ -144,6 +146,14 @@ namespace MathUtils{
 			Declination = dec;
 		}
 
+		public Vec3D ToRectangular(){
+			double x = Math.Sin (RA.Get()*15d * M.DEG2RAD) * Math.Cos(Declination.Get()*M.DEG2RAD);
+			double y = Math.Sin (Declination.Get() * M.DEG2RAD);
+			double z = Math.Cos (RA.Get()*15d * M.DEG2RAD) * Math.Cos(Declination.Get()*M.DEG2RAD);
+
+			return new Vec3D(x, y, z);
+		}
+
 	}
 
 	public class LocalCoords{
@@ -157,6 +167,14 @@ namespace MathUtils{
 			this.Azimuth = az;
 			this.Altitude = alt;
 		}
+
+		public Vec3D ToRectangular(){				
+			double x = Math.Sin (Azimuth.Get() * M.DEG2RAD) * Math.Cos(Altitude.Get()*M.DEG2RAD);
+			double y = Math.Sin (Altitude.Get() * M.DEG2RAD);
+			double z = Math.Cos (Azimuth.Get() * M.DEG2RAD) * Math.Cos(Altitude.Get()*M.DEG2RAD);
+			return new Vec3D (x, y, z);
+		}
+
 	}
 
 

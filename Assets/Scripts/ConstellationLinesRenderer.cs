@@ -26,9 +26,7 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 	void DrawConstellations(){
 
-		CreateLineMaterial ();
-		double jd = SimController.instance.GetJD ();
-		LocationData location = SimController.instance.location;
+		//CreateLineMaterial ();
 
 		foreach (Constellation constellation in sim.skyModel.GetConstellations()) {
 			GameObject goConst = new GameObject ();
@@ -43,6 +41,7 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 				GameObject go = new GameObject ();
 				go.transform.parent = goConst.transform;
 				LineRenderer renderer = go.AddComponent<LineRenderer> ();
+				renderer.useWorldSpace = false; //essential
 				renderer.name = "line_"+i;
 				renderer.SetVertexCount (2);
 				//renderer.material = lineMaterial;
@@ -52,8 +51,8 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
 
-				renderer.SetPosition(0, star1.GetNormalizedPosition () * (sim.radius + 1.0f));
-				renderer.SetPosition(1, star2.GetNormalizedPosition () * (sim.radius + 1.0f));
+				renderer.SetPosition(0, star1.GetNormalizedPosition () * (sim.radius + 0.0f));
+				renderer.SetPosition(1, star2.GetNormalizedPosition () * (sim.radius + 0.0f));
 				++i;
 			}
 		}
@@ -79,5 +78,10 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 			lineMaterial.SetInt ("_ZWrite", 0);
 		}
 	}	
+
+
+	void Update(){			
+
+	}
 		
 }

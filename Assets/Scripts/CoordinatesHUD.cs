@@ -48,7 +48,7 @@ public class CoordinatesHUD : MonoBehaviour {
 			
 			raGUI.text = "RA: " + equatorial.RA.ToString ();
 			declinationGUI.text = "Dec: " + equatorial.Declination.ToString ();
-			azimuthGUI.text = "Az: " + local.Azimuth.ToString ();
+			azimuthGUI.text = "Az: " + local.Azimuth.To0To360Range().ToString ();
 			altitudeGUI.text = "Alt: " + local.Altitude.ToString ();
 		}catch(NullReferenceException n){
 			

@@ -60,9 +60,7 @@ public class StarRenderer : MonoBehaviour {
 
 			points[i].startColor = star.GetStarRGB ();
 
-
 			points [i].startSize = maxStarSize * Mathf.Pow(star.getClampedMagnitude (), exponent) + minStarSize;
-
 
 			points[i].velocity = Vector3.zero;
 			points[i].angularVelocity = 0.0f;
@@ -75,9 +73,6 @@ public class StarRenderer : MonoBehaviour {
 		ps.SetParticles (points, points.Length);
 
 
-
-
-
 	}
 	
 	// Update is called once per frame
@@ -85,9 +80,6 @@ public class StarRenderer : MonoBehaviour {
 		if (ps == null || points == null) {
 			return;
 		}
-
-
-		//CreatePoints ();
 
 		ps.SetParticles(points, points.Length);
 	}
