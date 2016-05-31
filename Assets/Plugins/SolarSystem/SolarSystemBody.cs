@@ -54,7 +54,7 @@ public abstract class SolarSystemBody{
 
 		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (H, equatorialCoords.Declination.Get(), location.latitude);
 
-		localCoords.Azimuth = DegreesAngle.FromDecimalTo0To360Range(local.X);
+		localCoords.Azimuth = DegreesAngle.FromDecimalTo0To360Range(180.0f + local.X);
 		localCoords.Altitude = DegreesAngle.FromDecimalTo0To360Range (local.Y);
 	}
 
