@@ -12,7 +12,7 @@ public abstract class SolarSystemBody{
 	public abstract string GetTextureFilepath ();
 
 	//JD
-	protected double JD;
+	protected double jd;
 
 	//observers location
 	protected LocationData location;
@@ -21,10 +21,14 @@ public abstract class SolarSystemBody{
 	public LocalCoords localCoords = new LocalCoords();
 
 
+	public SolarSystemBody(double jd, LocationData location){
+		this.jd = jd;
+		this.location = location;
+	}
 
 
 	public void Update(double jd, LocationData location){
-		this.JD = jd;
+		this.jd = jd;
 		this.location = location;
 		Update ();
 	}
@@ -37,17 +41,12 @@ public abstract class SolarSystemBody{
 		double az  = localCoords.Azimuth.Get ();
 		double alt = localCoords.Altitude.Get ();
 
-		Vec3D ret = new Vec3D ();
-		ret.x = Math.Cos(alt*M.DEG2RAD)*Math.Sin (az * M.DEG2RAD);
-		ret.y = Math.Sin (alt * M.DEG2RAD);
-		ret.z = Math.Cos (alt * M.DEG2RAD) * Math.Cos(az*M.DEG2RAD);
-
-		return ret;
+		return Vec3D.PolarToRectangular(az, alt);
 	}
 
 	protected void CalculateTopocentricPosition (){
 
-		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (JD);
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
 
 		//hour angle in hours
 		double H = theta0Apparent - location.longitude/15d - equatorialCoords.RA.Get();
@@ -75,7 +74,7 @@ public abstract class SolarSystemBody{
 	//obliquity of the ecliptic
 	protected double GetDeltaEpsilon(){
 		
-		return AASNutation.MeanObliquityOfEcliptic(JD);
+		return AASNutation.MeanObliquityOfEcliptic(jd);
 	}
 
 }

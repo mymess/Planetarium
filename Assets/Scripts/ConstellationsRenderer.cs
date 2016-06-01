@@ -41,7 +41,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 
 		Transform zero = go.transform;
 		zero.position = Vector3.zero;
-		zero.rotation = new Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+		zero.rotation = Quaternion.identity;
 		zero.localScale = new Vector3 (1.0f, 1.0f, 1.0f); 
 
 		GL.MultMatrix (zero.worldToLocalMatrix);

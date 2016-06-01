@@ -31,7 +31,7 @@ public class SimController : MonoBehaviour{
 	public long month = 4;
 	public long day = 10;
 
-	public long hour = 10;
+	public long hour = 20;
 	public long minute = 0;
 	public double sec = 0.0;
 
@@ -43,7 +43,8 @@ public class SimController : MonoBehaviour{
 	public LocationData location;
 
 	public bool playMode = true;
-	public float timeScale = 500f;
+	private bool lastPlayMode;
+	public float timeScale = 1500f;
 
 
 	void Awake () {
@@ -57,6 +58,8 @@ public class SimController : MonoBehaviour{
 		lastJD = jd;
 		location = new LocationData (longitude, latitude, altitude);
 		lastLocation = new LocationData (longitude, latitude, altitude);
+
+		lastPlayMode = playMode;
 
 		skyModel = new SkyModel(jd, location);
 
@@ -75,28 +78,33 @@ public class SimController : MonoBehaviour{
 
 		skyModel.Update (jd, location);
 
-		RotateSkyGlobe ();
-
 	}
 
 	void Update () {		
 		if (playMode) {
 			jd += timeScale * Time.deltaTime / 86400f;
 			UpdateLocation ();
-
-			skyModel.Update (jd, location);
-
-			RotateSkyGlobe ();
-
+			try{
+				skyModel.Update (jd, location);
+				RotateSkyGlobe ();
+			}catch(NullReferenceException n){
+				Debug.Log ("skymodel = null");
+			}
 		} else {			
-			//if (IsTimeOrLocationUpdated ()) {
-				UpdateJD ();
+			//if (IsTimeOrLocationUpdated ()) {				
 				UpdateLocation ();
+			try{
+				if (!IsPlayModeToggled ()) {
+					UpdateJD ();	
+				} else {
+					lastPlayMode = playMode;
+				}
 
 				skyModel.Update (jd, location);
-
 				RotateSkyGlobe ();
-
+			} catch(NullReferenceException n) {
+				Debug.Log ("skymodel = null");
+			}
 				
 			//}
 		}			
@@ -105,6 +113,9 @@ public class SimController : MonoBehaviour{
 		UpdateLastLocation ();
 	}
 
+	private bool IsPlayModeToggled(){
+		return playMode != lastPlayMode;
+	}
 
 	private void RotateSkyGlobe(){
 		//reset
@@ -115,8 +126,6 @@ public class SimController : MonoBehaviour{
 
 		//topocentric vector of earth axis
 		Vector3 earthAxis = skyModel.GetEarthAxis ();
-
-		Debug.Log ("earthAxis --> "+earthAxis.ToString());
 
 		//correction for hour angle
 		double hourAngleRotationInDegrees = skyModel.GetHourAngleOfAriesPoint () * 15d;

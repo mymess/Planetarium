@@ -7,9 +7,7 @@ using MathUtils;
 public class MoonModel : SolarSystemBody {
 
 
-	public MoonModel(double jd, LocationData location) {
-		this.JD = jd;
-		this.location = location;
+	public MoonModel(double jd, LocationData location): base (jd, location) {		
 		Update ();
 	}
 
@@ -24,10 +22,10 @@ public class MoonModel : SolarSystemBody {
 
 
 	private void CalculateEquatorialPosition(){
-		DegreesAngle ecLon = new DegreesAngle(AASMoon.EclipticLongitude (JD));
-		DegreesAngle ecLat = new DegreesAngle(AASMoon.EclipticLatitude (JD));
+		DegreesAngle ecLon = new DegreesAngle(AASMoon.EclipticLongitude (jd));
+		DegreesAngle ecLat = new DegreesAngle(AASMoon.EclipticLatitude (jd));
 
-		double epsilon = AASNutation.TrueObliquityOfEcliptic (JD);
+		double epsilon = AASNutation.TrueObliquityOfEcliptic (jd);
 
 		AAS2DCoordinate eq = AASCoordinateTransformation.Ecliptic2Equatorial (ecLon.Get(), ecLat.Get(), epsilon);
 
@@ -48,6 +46,6 @@ public class MoonModel : SolarSystemBody {
 
 	public double GetDiameter(){
 		//TODO: cambiar por el Topocentric
-		return 2 * AASDiameters.GeocentricMoonSemidiameter (AASMoon.RadiusVector(JD));
+		return 2 * AASDiameters.GeocentricMoonSemidiameter (AASMoon.RadiusVector(jd));
 	}
 }

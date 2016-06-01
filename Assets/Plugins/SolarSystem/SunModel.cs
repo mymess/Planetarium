@@ -7,9 +7,7 @@ using MathUtils;
 public class SunModel : SolarSystemBody{
 
 
-	public SunModel(double jd, LocationData location){	
-		this.JD = jd;
-		this.location = location;
+	public SunModel(double jd, LocationData location): base(jd, location){			
 		Update ();	
 	}
 
@@ -34,7 +32,7 @@ public class SunModel : SolarSystemBody{
 	}
 
 	private double GetGeometricMeanLongitude (){
-		double T = (JD - 2451545.0) / 36525;
+		double T = (jd - 2451545.0) / 36525;
 
 		double T2 = T*T;
 
@@ -55,14 +53,14 @@ public class SunModel : SolarSystemBody{
 
 	//obliquity of the ecliptic
 	private double GetEpsilon(){
-		return AASNutation.MeanObliquityOfEcliptic (JD);
+		return AASNutation.MeanObliquityOfEcliptic (jd);
 	}
 
 
 	//obliquity of the ecliptic with correction
 	private double GetEpsilonCorrected(){
-		double T = (JD - 2451545.0) / 36525;
-		double epsilon0 = AASNutation.MeanObliquityOfEcliptic (JD);
+		double T = (jd - 2451545.0) / 36525;
+		double epsilon0 = AASNutation.MeanObliquityOfEcliptic (jd);
 		double omega = 125.04 - 1934.136 * T;
 		double deltaEpsilon = .00256 * Math.Cos (omega*M.DEG2RAD);
 
@@ -71,7 +69,7 @@ public class SunModel : SolarSystemBody{
 
 
 	private double GetApparentLongitudeForTrueDateEquinox(){
-		double T = (JD - 2451545.0) / 36525;
+		double T = (jd - 2451545.0) / 36525;
 		double omega = 125.04 - 1934.136 * T;
 		double lambda = GetGeometricMeanLongitude () - .00569 - .00478 * Math.Sin(omega *M.DEG2RAD);
 
@@ -79,7 +77,7 @@ public class SunModel : SolarSystemBody{
 	}
 
 	public double GetDiameter(){
-		return AASDiameters.SunSemidiameterA (AASEarth.RadiusVector(JD));
+		return AASDiameters.SunSemidiameterA (AASEarth.RadiusVector(jd));
 	}
 
 

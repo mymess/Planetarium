@@ -93,12 +93,7 @@ public class StarModel{
 		Debug.Log (string.Format("StardId {0} {1} {2} {3} {4} {5} {6}", starID, hip, ra, dec, mag, absMag, spectrum));
 	}
 
-	public Vector3 GetNormalizedPosition(){
-		float x = Mathf.Cos(dec * Mathf.Deg2Rad) * Mathf.Sin(ra*15.0f *Mathf.Deg2Rad);
-		float y = Mathf.Sin(dec * Mathf.Deg2Rad);
-		float z = -Mathf.Cos(dec * Mathf.Deg2Rad) * Mathf.Cos(ra*15.0f *Mathf.Deg2Rad);
-		return new Vector3 (x, y, z);
-	}
+
 
 	public Vector3 GetEquatorialRectangularCoords(){
 		/*
@@ -231,13 +226,19 @@ public class SkyModel  {
 
 	private MoonModel moon;
 
-
+	public static SkyModel instance;
 	private LocationData location;
 	private double jd;
 
 
-	public SkyModel(double jd, LocationData location){
+	public SkyModel(double julianDay, LocationData location){
+		
+		if (instance == null) {
+			instance = this;
+		}
+
 		this.location = location;
+		this.jd = julianDay;
 
 		sun               = new SunModel (jd, location);
 		moon        	  = new MoonModel (jd, location);
@@ -300,9 +301,14 @@ public class SkyModel  {
 	}
 
 
-	public static EquatorialCoords Horizontal2Equatorial(double azimuth, double altitude, double latitude){
-		AAS2DCoordinate coords = AASCoordinateTransformation.Horizontal2Equatorial (azimuth, altitude, latitude);
-		return new EquatorialCoords(new HourAngle(coords.X), new DegreesAngle( coords.Y ));
+	public EquatorialCoords Horizontal2Equatorial(double azimuth, double altitude){
+		AAS2DCoordinate coords = AASCoordinateTransformation.Horizontal2Equatorial (azimuth+180, altitude, location.latitude);
+
+		//right ascension (alpha) = apparent sidereal time at Greenwich (theta) - Local hour angle (H) - observer's longitude (L, positive west, negative east from Greenwich)
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+		double ra = theta0Apparent - coords.X - location.longitude / 15d;
+
+		return new EquatorialCoords(new HourAngle(ra), new DegreesAngle( coords.Y ));
 	}
 
 	public static LocalCoords Rectangular2Horizontal(double x, double y, double z){
@@ -310,7 +316,9 @@ public class SkyModel  {
 		double alt = Math.Atan2 (y, Math.Sqrt (x * x + z * z)) *M.RAD2DEG;
 		return new LocalCoords (new DegreesAngle (az), new DegreesAngle (alt));
 	}
-		
+
+
+
 
 
 	public List<StarModel> GetStars(){ return stars; }

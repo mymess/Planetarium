@@ -21,12 +21,16 @@ public class CoordinatesHUD : MonoBehaviour {
 
 	private Component[] textGUIs;
 
+	private SkyModel skyModel;
+
 	// Use this for initialization
 	void Start () {		
 		raGUI = ra.GetComponent<Text> ();
 		declinationGUI = dec.GetComponent<Text> ();
 		azimuthGUI = az.GetComponent<Text> ();
 		altitudeGUI = alt.GetComponent<Text> ();
+
+		skyModel = SimController.instance.skyModel;
 	}
 	
 	// Update is called once per frame
@@ -40,10 +44,10 @@ public class CoordinatesHUD : MonoBehaviour {
 
 			LocalCoords local = SkyModel.Rectangular2Horizontal ((double)pointingAt.x, (double)pointingAt.y, (double)pointingAt.z);
 
-			EquatorialCoords equatorial = SkyModel.Horizontal2Equatorial (
+			EquatorialCoords equatorial = skyModel.Horizontal2Equatorial (
 				local.Azimuth.Get(), 
-				local.Altitude.Get(), 
-				SimController.instance.location.latitude);
+				local.Altitude.Get()
+			);
 
 			
 			raGUI.text = "RA: " + equatorial.RA.ToString ();

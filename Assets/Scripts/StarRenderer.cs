@@ -56,7 +56,7 @@ public class StarRenderer : MonoBehaviour {
 			StarModel star = skyModel.GetStars () [i];
 		
 
-			points[i].position = star.GetNormalizedPosition() * sim.radius;
+			points[i].position = star.GetEquatorialRectangularCoords() * sim.radius;
 
 			points[i].startColor = star.GetStarRGB ();
 

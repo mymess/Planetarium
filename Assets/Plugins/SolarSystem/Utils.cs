@@ -99,8 +99,8 @@ namespace MathUtils{
 			return degrees;
 		}
 
-		public double To0To360Range(){
-			return AASCoordinateTransformation.MapTo0To360Range (degrees);
+		public DegreesAngle To0To360Range(){
+			return new DegreesAngle(AASCoordinateTransformation.MapTo0To360Range (degrees));
 		}
 
 		public static DegreesAngle FromDecimalTo0To360Range(double deg){
@@ -129,7 +129,7 @@ namespace MathUtils{
 		public override string ToString(){
 			return string.Format ("{0:D2}º {1:D2}' {2:D2}\"", 
 				Degrees().ToString("00").PadLeft(2,'0'), 
-				Minutes().ToString().PadLeft(2,'0'), 
+				Minutes().ToString("00").PadLeft(2,'0'), 
 				Math.Round(Seconds(), 2).ToString("00.00"));
 		}
 	}
@@ -147,11 +147,15 @@ namespace MathUtils{
 		}
 
 		public Vec3D ToRectangular(){
+
+			return Vec3D.PolarToRectangular (RA.Get () * 15d, Declination.Get ());
+			/*
 			double x = Math.Sin (RA.Get()*15d * M.DEG2RAD) * Math.Cos(Declination.Get()*M.DEG2RAD);
 			double y = Math.Sin (Declination.Get() * M.DEG2RAD);
 			double z = Math.Cos (RA.Get()*15d * M.DEG2RAD) * Math.Cos(Declination.Get()*M.DEG2RAD);
 
 			return new Vec3D(x, y, z);
+			*/
 		}
 
 	}
@@ -168,11 +172,15 @@ namespace MathUtils{
 			this.Altitude = alt;
 		}
 
-		public Vec3D ToRectangular(){				
+		public Vec3D ToRectangular(){			
+		
+			return Vec3D.PolarToRectangular (Azimuth.Get (), Altitude.Get ());
+			/*
 			double x = Math.Sin (Azimuth.Get() * M.DEG2RAD) * Math.Cos(Altitude.Get()*M.DEG2RAD);
 			double y = Math.Sin (Altitude.Get() * M.DEG2RAD);
 			double z = Math.Cos (Azimuth.Get() * M.DEG2RAD) * Math.Cos(Altitude.Get()*M.DEG2RAD);
 			return new Vec3D (x, y, z);
+			*/
 		}
 
 	}
@@ -262,6 +270,15 @@ namespace MathUtils{
 		{
 			return string.Format ("x={0}, y={1}, z={2}", x, y, z);
 		}
+
+		public static Vec3D PolarToRectangular(double angleX, double angleY){
+			double x = Math.Sin (angleX * M.DEG2RAD) * Math.Cos(angleY*M.DEG2RAD);
+			double y = Math.Sin (angleY * M.DEG2RAD);
+			double z = Math.Cos (angleX * M.DEG2RAD) * Math.Cos(angleY*M.DEG2RAD);
+
+			return new Vec3D (x, y, z);
+		}
+
 
 		public void Log(){
 			Debug.Log (ToString ());

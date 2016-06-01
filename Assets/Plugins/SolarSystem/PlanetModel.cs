@@ -50,9 +50,7 @@ public abstract class PlanetModel : SolarSystemBody{
 	//Earth's orbit obliquity
 	protected double epsilon;
 
-	public PlanetModel(double jd, LocationData location){
-		this.JD = jd;
-		this.location = location;
+	public PlanetModel(double jd, LocationData location) : base(jd, location){		
 		Update ();
 	}
 
@@ -75,13 +73,13 @@ public abstract class PlanetModel : SolarSystemBody{
 	}
 
 	protected void CalculateGeometricPositions(){
-		eclipticLongitude = GetEclipticLongitude (JD);
-		eclipticLatitude  = GetEclipticLatitude (JD);
-		double planetSunDistance = GetRadiusVector (JD);
+		eclipticLongitude = GetEclipticLongitude (jd);
+		eclipticLatitude  = GetEclipticLatitude (jd);
+		double planetSunDistance = GetRadiusVector (jd);
 
-		eclipticLongitudeEarth  = AASEarth.EclipticLongitude (JD);
-		eclipticLatitudeEarth   = AASEarth.EclipticLatitude (JD);
-		double earthSunDistance = AASEarth.RadiusVector (JD);
+		eclipticLongitudeEarth  = AASEarth.EclipticLongitude (jd);
+		eclipticLatitudeEarth   = AASEarth.EclipticLatitude (jd);
+		double earthSunDistance = AASEarth.RadiusVector (jd);
 
 		vectorToEarth = VectorToEarth (eclipticLongitude, eclipticLatitude, planetSunDistance, eclipticLongitudeEarth, eclipticLatitudeEarth, earthSunDistance);
 
@@ -90,7 +88,7 @@ public abstract class PlanetModel : SolarSystemBody{
 	protected void CorrectForLightTavelTime(){
 		//
 		double tau = AASElliptical.DistanceToLightTime (vectorToEarth.Length());
-		jde = JD - tau;
+		jde = jd - tau;
 
 		eclipticLongitudeCorrected = GetEclipticLongitude (jde); 			
 		eclipticLatitudeCorrected = GetEclipticLatitude (jde);
@@ -98,18 +96,18 @@ public abstract class PlanetModel : SolarSystemBody{
 
 
 		vectorToEarthCorrected = VectorToEarth (eclipticLongitudeCorrected, 
-			eclipticLatitudeCorrected, distanceToSun, eclipticLongitudeEarth, eclipticLatitudeEarth, AASEarth.RadiusVector(JD));
+			eclipticLatitudeCorrected, distanceToSun, eclipticLongitudeEarth, eclipticLatitudeEarth, AASEarth.RadiusVector(jd));
 		double tauCorrected    = AASElliptical.DistanceToLightTime (vectorToEarthCorrected.Length());
 
-		jdeCorrected = JD - tauCorrected;
+		jdeCorrected = jd - tauCorrected;
 		eclipticLongitudeCorrected = GetEclipticLongitude (jdeCorrected);
 		eclipticLatitudeCorrected  = GetEclipticLatitude (jdeCorrected);
 		distanceToSun = GetRadiusVector (jdeCorrected);
 	}
 
 	protected void CorrectForAberration(){
-		double e = GetEarthEccentricity (JD);
-		double pi = GetEarthPerihelionLongitude(JD);
+		double e = GetEarthEccentricity (jd);
+		double pi = GetEarthPerihelionLongitude(jd);
 
 		double theta = AASSun.GeometricEclipticLongitude (jdeCorrected);
 
@@ -233,7 +231,7 @@ public abstract class PlanetModel : SolarSystemBody{
 	public double Magnitude(){
 		double phaseAngle = AASIlluminatedFraction.PhaseAngle(
 			GetRadiusVector(jdeCorrected), 
-			AASEarth.RadiusVector(JD), 
+			AASEarth.RadiusVector(jd), 
 			vectorToEarthCorrected.Length());
 
 		return AASIlluminatedFraction.MarsMagnitudeMuller(
