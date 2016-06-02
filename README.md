@@ -6,7 +6,7 @@ I expect to publish it as a Unity asset and/or standalone application.
 
 ###Goal features:
 1. Physical atmosphere
-2. Object picking
+2. Object picking + popup display
 3. Location + Date/Time + settings dialogs
 4. Deep space objects
 5. Terrain 
@@ -16,7 +16,7 @@ I expect to publish it as a Unity asset and/or standalone application.
 
 
 
-Some pics:
+###Some pics:
 
 
 <img width="1253" alt="captura de pantalla 2016-06-02 a las 12 46 18" src="https://cloud.githubusercontent.com/assets/15065645/15743750/ebf3d57c-28c7-11e6-8be4-8e5226dcb963.png">
