@@ -20,6 +20,7 @@ public abstract class SolarSystemBody{
 	public EquatorialCoords equatorialCoords = new EquatorialCoords();
 	public LocalCoords localCoords = new LocalCoords();
 
+	public double localHourAngle;
 
 	public SolarSystemBody(double jd, LocationData location){
 		this.jd = jd;
@@ -40,8 +41,29 @@ public abstract class SolarSystemBody{
 	public Vec3D GetRectangularLocalPosition(){
 		double az  = localCoords.Azimuth.Get ();
 		double alt = localCoords.Altitude.Get ();
+		/*
+		Vec3D ret = new Vec3D ();
+		ret.x = Math.Cos(alt*M.DEG2RAD)*Math.Sin (az * M.DEG2RAD);
+		ret.y = Math.Sin (alt * M.DEG2RAD);
+		ret.z = Math.Cos (alt * M.DEG2RAD) * Math.Cos(az*M.DEG2RAD);
+
+		//return ret;
+		*/
 
 		return Vec3D.PolarToRectangular(az, alt);
+	}
+
+
+	public Vec3D GetRectangularFromEquatorialCoords(){
+		double ra  = equatorialCoords.RA.Get() * 15d;
+		double dec = equatorialCoords.Declination.Get();
+
+		float x = Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Sin((float)ra *Mathf.Deg2Rad);
+		float y = Mathf.Sin((float)dec * Mathf.Deg2Rad);
+		float z = Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Cos((float)ra *Mathf.Deg2Rad);
+
+
+		return new Vec3D (x, y, z);
 	}
 
 	protected void CalculateTopocentricPosition (){
@@ -49,12 +71,13 @@ public abstract class SolarSystemBody{
 		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
 
 		//hour angle in hours
-		double H = theta0Apparent - location.longitude/15d - equatorialCoords.RA.Get();
+		localHourAngle = theta0Apparent - location.longitude/15d - equatorialCoords.RA.Get();
 
-		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (H, equatorialCoords.Declination.Get(), location.latitude);
+		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (localHourAngle, equatorialCoords.Declination.Get(), location.latitude);
 
-		localCoords.Azimuth = DegreesAngle.FromDecimalTo0To360Range(180.0f + local.X);
-		localCoords.Altitude = DegreesAngle.FromDecimalTo0To360Range (local.Y);
+
+		localCoords.Azimuth  = DegreesAngle.FromDecimalTo0To360Range(180.0f + local.X);
+		localCoords.Altitude = new DegreesAngle (local.Y);
 	}
 
 

@@ -31,18 +31,18 @@ public class SimController : MonoBehaviour{
 	public long month = 4;
 	public long day = 10;
 
-	public long hour = 20;
+	public long hour = 10;
 	public long minute = 0;
 	public double sec = 0.0;
 
 	public double longitude = 0.0;
-	public double latitude = 90.0;
+	public double latitude = 40.0;
 	public double altitude = 100;
 
 	private LocationData lastLocation;
 	public LocationData location;
 
-	public bool playMode = true;
+	public bool playMode = false;
 	private bool lastPlayMode;
 	public float timeScale = 1500f;
 
@@ -53,11 +53,11 @@ public class SimController : MonoBehaviour{
 			instance = this;
 		} 
 
-		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
-		jd = AASDate.DateToJD (year, month, dayDec, true);
+		UpdateJD ();
+		UpdateLocation ();
+		UpdateLastLocation ();
+
 		lastJD = jd;
-		location = new LocationData (longitude, latitude, altitude);
-		lastLocation = new LocationData (longitude, latitude, altitude);
 
 		lastPlayMode = playMode;
 
@@ -67,55 +67,68 @@ public class SimController : MonoBehaviour{
 		ParseStarsRaw ();
 		ParseConstellations ();
 
-
-
 	}
 
+	///2446895.91666667
+
 	void Start(){
+
+		Debug.Log (string.Format("JD: {0}", jd));
+		Debug.Log (string.Format("Time: {0}:{1}:{2}", hour, minute, sec));
+		skyModel.GetSun ().Log ();
+		HourAngle H = new HourAngle (skyModel.GetSun ().localHourAngle);
+		Debug.Log (string.Format("H {0}", H.ToString() ));
+
+		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (skyModel.GetSun ().localHourAngle, 
+			skyModel.GetSun().equatorialCoords.Declination.Get(), 
+			location.latitude);
 		
-		UpdateJD ();
-		UpdateLocation ();
-
-		skyModel.Update (jd, location);
-
+		Debug.Log (string.Format("local X {0}", local.X ));
+		Debug.Log (string.Format("local Y {0}", local.Y ));
 	}
 
 	void Update () {		
 		if (playMode) {
 			jd += timeScale * Time.deltaTime / 86400f;
 			UpdateLocation ();
-			try{
-				skyModel.Update (jd, location);
-				RotateSkyGlobe ();
-			}catch(NullReferenceException n){
-				Debug.Log ("skymodel = null");
-			}
+			UpdateDateAndTime ();
+
+			skyModel.Update (jd, location);
+			RotateSkyGlobe ();
+
 		} else {			
+			if (!IsPlayModeToggled ()){
 			//if (IsTimeOrLocationUpdated ()) {				
 				UpdateLocation ();
-			try{
-				if (!IsPlayModeToggled ()) {
-					UpdateJD ();	
-				} else {
-					lastPlayMode = playMode;
-				}
-
+				UpdateJD ();	
 				skyModel.Update (jd, location);
 				RotateSkyGlobe ();
-			} catch(NullReferenceException n) {
-				Debug.Log ("skymodel = null");
-			}
-				
+				lastPlayMode = playMode;
+			}				
 			//}
 		}			
 
 		lastJD = jd;
+
 		UpdateLastLocation ();
 	}
 
 	private bool IsPlayModeToggled(){
 		return playMode != lastPlayMode;
 	}
+
+
+	private void UpdateDateAndTime(){
+		AASDate date = new AASDate (jd, true);
+		year = date.Year;
+		month = date.Month;
+		day = date.Day;
+		hour = date.Hour;
+		minute = date.Minute;
+		sec = date.Second;
+
+	}
+		
 
 	private void RotateSkyGlobe(){
 		//reset
@@ -158,7 +171,7 @@ public class SimController : MonoBehaviour{
 	}
 
 	private void UpdateLastLocation(){
-		location = new LocationData (longitude, latitude, altitude);
+		lastLocation = new LocationData (longitude, latitude, altitude);
 	}
 
 	public bool IsPlayMode(){

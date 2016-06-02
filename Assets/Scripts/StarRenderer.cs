@@ -20,8 +20,6 @@ public class StarRenderer : MonoBehaviour {
 
 	private SkyModel skyModel;
 
-	private float currentRadius;
-
 	private SimController sim;
 
 	private ParticleEmitter emitter;
@@ -30,8 +28,6 @@ public class StarRenderer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ps = gameObject.GetComponent<ParticleSystem> ();
-
-		ParticleEmitter emitter = ps.GetComponent<ParticleEmitter> ();
 
 
 		sim = SimController.instance;
@@ -49,7 +45,7 @@ public class StarRenderer : MonoBehaviour {
 		points = new ParticleSystem.Particle[ skyModel.GetStars().Count ];
 
 
-		currentRadius = sim.radius;
+	
 		currentStarSize = maxStarSize;
 
 		for(int i = 0; i < skyModel.GetStars().Count; i++){
@@ -84,9 +80,5 @@ public class StarRenderer : MonoBehaviour {
 		ps.SetParticles(points, points.Length);
 	}
 
-	void UpdateStars(){
-		double jd = SimController.instance.GetJD ();
-		LocationData location = SimController.instance.GetLocation ();
-	}
 
 }

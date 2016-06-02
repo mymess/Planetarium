@@ -4,7 +4,7 @@ using System.Collections;
 using AASharp;
 using MathUtils;
 
-public class SunModel : SolarSystemBody{
+public class SunModel : SolarSystemBody {
 
 
 	public SunModel(double jd, LocationData location): base(jd, location){			

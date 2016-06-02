@@ -10,7 +10,7 @@ public class MoonRenderer : MonoBehaviour {
 
 	private MoonModel moon;
 
-	public float scale = 30;
+	public float scale = 60;
 
 
 	void Awake(){
@@ -35,17 +35,18 @@ public class MoonRenderer : MonoBehaviour {
 
 	void SetPosition(){
 		try{
-			Vec3D pos = sim.skyModel.GetMoon().GetRectangularLocalPosition ();
-			float x = .5f*sim.radius*(float)pos.x;
-			float y = .5f*sim.radius*(float)pos.y;
-			float z = .5f*sim.radius*(float)pos.z;
-			gameObject.transform.position = new Vector3 (x, y, z);
+			Vec3D pos = moon.GetRectangularLocalPosition();
+			float x = .8f*sim.radius*(float)pos.x;
+			float y = .8f*sim.radius*(float)pos.y;
+			float z = .8f*sim.radius*(float)pos.z;
+			transform.position = new Vector3 (x, y, z);
 		}catch(NullReferenceException n){
 		}
 	}
 
 	void SetScale(){
-		transform.localScale = new Vector3(transform.localScale.x * scale, transform.localScale.y * scale, transform.localScale.z * scale);
+		
+		transform.localScale = new Vector3(scale, scale, scale);
 	}
 
 

@@ -11,6 +11,8 @@ public class SunRenderer : MonoBehaviour {
 
 	private float distance;
 
+	private Light dirLight;
+
 	// Use this for initialization
 	void Start () {
 
@@ -20,23 +22,23 @@ public class SunRenderer : MonoBehaviour {
 		sun = sim.skyModel.GetSun();
 
 		float size = 60.0f;//transform.localScale.magnitude;
-		float diameter = (float)sun.GetDiameter ();
+
 		transform.localScale = new Vector3 (size, size, size);
 
-
+		dirLight = GetComponent<Light> ();
 		SetPosition ();
 
+		//Debug.Log("light pos -> "+ dirLight.transform.position.ToString ());
 	}
 
 	void Update () {
 		SetPosition ();
+		transform.localRotation.SetLookRotation (-transform.position);
 	}
 
-	void SetPosition(){
-		if (sun != null) {
-			Vec3D v = sun.GetRectangularLocalPosition ();
-		gameObject.transform.position = new Vector3 ((float)v.x, (float)v.y, (float)v.z) * distance;
-		}
+	void SetPosition(){			
+		Vec3D v = sun.GetRectangularLocalPosition ();
+		transform.position = new Vector3 ((float)v.x, (float)v.y, (float)v.z) * distance;
 	}
 
 
