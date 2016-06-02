@@ -5,12 +5,14 @@ The project's goal is to be able to watch the stars, sun, moon, planets and deep
 I expect to publish it as a Unity asset and/or standalone application.
 
 ###Goal features:
-1) Physical atmosphere
-2) Deep space objects
-3) Terrain 
-4) RA/Decl circles
-5) Saturn rings and moons + Jupiter moons
-6) VR integration
+1. Physical atmosphere
+2. Object picking
+3. Location + Date/Time + settings dialogs
+4. Deep space objects
+5. Terrain 
+6. RA/Decl circles
+7. Saturn rings and moons + Jupiter moons
+8. VR integration
 
 
 
