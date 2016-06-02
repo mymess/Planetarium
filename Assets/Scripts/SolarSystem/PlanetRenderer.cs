@@ -29,6 +29,7 @@ public abstract class PlanetRenderer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {		
 		SetPosition ();
+		transform.LookAt(Camera.main.transform);
 	}
 
 	public void SetPosition(){
