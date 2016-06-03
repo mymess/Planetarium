@@ -27,10 +27,10 @@ public class SolarSystemRenderer : MonoBehaviour {
 		sim = SimController.instance;
 		skyModel = sim.skyModel;
 
-		DrawSun ();
-		DrawMoon ();
+		//DrawSun ();
+		//DrawMoon ();
 
-		DrawPlanets();
+		//DrawPlanets();
 	}
 
 	// Update is called once per frame

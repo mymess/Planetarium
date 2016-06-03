@@ -50,7 +50,6 @@
      <Compile Include="Assets\Scripts\CoordinatesHUD.cs" />
      <Compile Include="Assets\Scripts\SimController.cs" />
      <Compile Include="Assets\Scripts\SkyGlobeRotator.cs" />
-     <Compile Include="Assets\Scripts\SkyModel.cs" />
      <Compile Include="Assets\Scripts\SmoothMouseLook.cs" />
      <Compile Include="Assets\Scripts\SolarSystem\JupiterRenderer.cs" />
      <Compile Include="Assets\Scripts\SolarSystem\MarsRenderer.cs" />

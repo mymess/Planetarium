@@ -35,11 +35,11 @@ public class MoonRenderer : MonoBehaviour {
 
 	void SetPosition(){
 		try{
-			Vec3D pos = moon.GetRectangularLocalPosition();
+			Vec3D pos = moon.GetRectangularFromEquatorialCoords();
 			float x = .8f*sim.radius*(float)pos.x;
 			float y = .8f*sim.radius*(float)pos.y;
 			float z = .8f*sim.radius*(float)pos.z;
-			transform.position = new Vector3 (x, y, z);
+			transform.localPosition = new Vector3 (x, y, z);
 		}catch(NullReferenceException n){
 		}
 	}

@@ -120,6 +120,7 @@
      <Compile Include="Assets\Plugins\AASharp\PlutoCoefficient2.cs" />
      <Compile Include="Assets\Plugins\AASharp\VSOP87Coefficient.cs" />
      <Compile Include="Assets\Plugins\SimpleJSON.cs" />
+     <Compile Include="Assets\Plugins\SkyModel.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\JupiterModel.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\MarsModel.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\MercuryModel.cs" />
@@ -130,8 +131,9 @@
      <Compile Include="Assets\Plugins\SolarSystem\SolarSystemBody.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\SunModel.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\UranusModel.cs" />
-     <Compile Include="Assets\Plugins\SolarSystem\Utils.cs" />
      <Compile Include="Assets\Plugins\SolarSystem\VenusModel.cs" />
+     <Compile Include="Assets\Plugins\StarModel.cs" />
+     <Compile Include="Assets\Plugins\Utils.cs" />
      <Compile Include="Assets\Standard Assets\Cameras\Scripts\AbstractTargetFollower.cs" />
      <Compile Include="Assets\Standard Assets\Cameras\Scripts\AutoCam.cs" />
      <Compile Include="Assets\Standard Assets\Cameras\Scripts\FreeLookCam.cs" />

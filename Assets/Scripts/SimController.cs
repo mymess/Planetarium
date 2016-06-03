@@ -82,7 +82,8 @@ public class SimController : MonoBehaviour{
 		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (skyModel.GetSun ().localHourAngle, 
 			skyModel.GetSun().equatorialCoords.Declination.Get(), 
 			location.latitude);
-		
+
+
 		Debug.Log (string.Format("local X {0}", local.X ));
 		Debug.Log (string.Format("local Y {0}", local.Y ));
 	}
@@ -94,7 +95,7 @@ public class SimController : MonoBehaviour{
 			UpdateDateAndTime ();
 
 			skyModel.Update (jd, location);
-			RotateSkyGlobe ();
+			//RotateSkyGlobe ();
 
 		} else {			
 			if (!IsPlayModeToggled ()){
@@ -102,7 +103,7 @@ public class SimController : MonoBehaviour{
 				UpdateLocation ();
 				UpdateJD ();	
 				skyModel.Update (jd, location);
-				RotateSkyGlobe ();
+				//RotateSkyGlobe ();
 				lastPlayMode = playMode;
 			}				
 			//}
@@ -111,6 +112,10 @@ public class SimController : MonoBehaviour{
 		lastJD = jd;
 
 		UpdateLastLocation ();
+	}
+
+	void LateUpdate(){
+		RotateSkyGlobe ();
 	}
 
 	private bool IsPlayModeToggled(){

@@ -34,8 +34,8 @@ public abstract class PlanetRenderer : MonoBehaviour {
 
 	public void SetPosition(){
 		try{
-			Vec3D v = model.GetRectangularLocalPosition();
-			transform.position = new Vector3 ((float)v.x,(float) v.y,(float) v.z) * distance;
+			Vec3D v = model.GetRectangularFromEquatorialCoords();
+			transform.localPosition = new Vector3 ((float)v.x,(float) v.y,(float) v.z) * distance;
 		}catch(NullReferenceException n){
 			
 		}
