@@ -14,11 +14,6 @@ public class UranusModel : PlanetModel {
 		return "Uranus";
 	}
 
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
-
 	public override double GetEclipticLongitude (double jd)
 	{
 		return AASUranus.EclipticLongitude(jd);

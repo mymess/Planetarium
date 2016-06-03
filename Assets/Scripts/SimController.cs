@@ -95,7 +95,6 @@ public class SimController : MonoBehaviour{
 			UpdateDateAndTime ();
 
 			skyModel.Update (jd, location);
-			//RotateSkyGlobe ();
 
 		} else {			
 			if (!IsPlayModeToggled ()){
@@ -103,7 +102,7 @@ public class SimController : MonoBehaviour{
 				UpdateLocation ();
 				UpdateJD ();	
 				skyModel.Update (jd, location);
-				//RotateSkyGlobe ();
+
 				lastPlayMode = playMode;
 			}				
 			//}
@@ -114,7 +113,7 @@ public class SimController : MonoBehaviour{
 		UpdateLastLocation ();
 	}
 
-	void LateUpdate(){
+	void LateUpdate(){		
 		RotateSkyGlobe ();
 	}
 

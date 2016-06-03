@@ -14,11 +14,6 @@ public class SaturnModel : PlanetModel {
 		return "Saturn";
 	}
 
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
-
 	public override double GetEclipticLongitude (double jd)
 	{
 		return AASSaturn.EclipticLongitude (jd);

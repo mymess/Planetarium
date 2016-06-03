@@ -13,12 +13,7 @@ public class MercuryModel : PlanetModel {
 	public override string GetName ()
 	{
 		return "Mercury";
-	}
-
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
+	}		
 
 
 	public override double GetEclipticLongitude (double jd)

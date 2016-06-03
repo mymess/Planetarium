@@ -38,12 +38,6 @@ public class MoonModel : SolarSystemBody {
 		return "Moon";
 	}
 
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
-
-
 	public double GetDiameter(){
 		//TODO: cambiar por el Topocentric
 		return 2 * AASDiameters.GeocentricMoonSemidiameter (AASMoon.RadiusVector(jd));

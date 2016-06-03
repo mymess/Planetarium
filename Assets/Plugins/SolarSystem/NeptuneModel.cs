@@ -15,12 +15,7 @@ public class NeptuneModel : PlanetModel {
 	public override string GetName ()
 	{
 		return "Neptune";
-	}
-
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
+	}		
 
 	public override double GetEclipticLongitude (double jd)
 	{

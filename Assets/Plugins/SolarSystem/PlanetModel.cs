@@ -18,9 +18,6 @@ public abstract class PlanetModel : SolarSystemBody{
 	protected double jde;
 	protected double jdeCorrected;
 
-	protected Vec3D vectorToEarth;
-	protected Vec3D vectorToEarthCorrected;
-
 	//geometric ecliptic longitude and latitude
 	protected double eclipticLongitude;
 	protected double eclipticLatitude;

@@ -86,9 +86,5 @@ public class SunModel : SolarSystemBody {
 	{
 		return "Sun";
 	}
-
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
+		
 }

@@ -13,11 +13,6 @@ public class MarsModel : PlanetModel {
 		return "Mars";
 	}
 
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
-
 	public override double GetEclipticLongitude (double jd)
 	{
 		return AASMars.EclipticLongitude (jd);

@@ -23,7 +23,12 @@ public class MoonRenderer : MonoBehaviour {
 
 		sim = SimController.instance;
 		moon = sim.skyModel.GetMoon();
-		SetPosition ();
+
+
+		//transform.rotation.SetLookRotation(Camera.main.transform.position);
+
+		transform.Rotate (new Vector3 (0, 90, 0));
+
 		SetScale ();	
 	}
 	
@@ -35,11 +40,19 @@ public class MoonRenderer : MonoBehaviour {
 
 	void SetPosition(){
 		try{
+
+			transform.localRotation =  Quaternion.Euler(new Vector3(0, 90.0f, 0));
+			transform.rotation.SetLookRotation(Camera.main.transform.position);
+
 			Vec3D pos = moon.GetRectangularFromEquatorialCoords();
 			float x = .8f*sim.radius*(float)pos.x;
 			float y = .8f*sim.radius*(float)pos.y;
 			float z = .8f*sim.radius*(float)pos.z;
+
 			transform.localPosition = new Vector3 (x, y, z);
+
+
+
 		}catch(NullReferenceException n){
 		}
 	}
@@ -47,6 +60,7 @@ public class MoonRenderer : MonoBehaviour {
 	void SetScale(){
 		
 		transform.localScale = new Vector3(scale, scale, scale);
+	
 	}
 
 

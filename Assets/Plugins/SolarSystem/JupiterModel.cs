@@ -13,12 +13,7 @@ public class JupiterModel : PlanetModel {
 	public override string GetName ()
 	{
 		return "Jupiter";
-	}
-
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
+	}		
 
 	public override double GetEclipticLongitude (double jd)
 	{

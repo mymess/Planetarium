@@ -15,12 +15,7 @@ public class VenusModel : PlanetModel{
 	{
 		return "Venus";
 	}
-
-	public override string GetTextureFilepath ()
-	{
-		return "";
-	}
-
+		
 	protected override AASEllipticalObject GetEllipticalObject ()
 	{
 		return AASEllipticalObject.VENUS;

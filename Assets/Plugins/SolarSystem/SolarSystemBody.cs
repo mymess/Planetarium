@@ -9,13 +9,15 @@ public abstract class SolarSystemBody{
 	
 
 	public abstract string GetName ();
-	public abstract string GetTextureFilepath ();
 
 	//JD
 	protected double jd;
 
 	//observers location
 	protected LocationData location;
+	protected Vec3D vectorToEarth;
+	protected Vec3D vectorToEarthCorrected;
+
 
 	public EquatorialCoords equatorialCoords = new EquatorialCoords();
 	public LocalCoords localCoords = new LocalCoords();
