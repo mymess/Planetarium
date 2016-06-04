@@ -10,8 +10,7 @@ public abstract class PlanetModel : SolarSystemBody{
 
 	public abstract double GetEclipticLongitude (double jd);
 	public abstract double GetEclipticLatitude (double jd);
-	public abstract double GetRadiusVector (double jd);
-	public abstract double GetSemidiameter ();
+
 
 	protected abstract AASEllipticalObject GetEllipticalObject();
 
@@ -236,6 +235,12 @@ public abstract class PlanetModel : SolarSystemBody{
 					vectorToEarthCorrected.Length(), 
 					phaseAngle
 			);
+	}
+
+	public double GetParallacticAngle(){
+		return AASParallactic.ParallacticAngle (localHourAngle, 
+			location.latitude, 
+			equatorialCoords.Declination.Get ());
 	}
 
 }

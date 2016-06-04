@@ -20,19 +20,19 @@ public class VenusModel : PlanetModel{
 	{
 		return AASEllipticalObject.VENUS;
 	}
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASVenus.EclipticLongitude (jd);
+		return AASVenus.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASVenus.EclipticLatitude (jd);
+		return AASVenus.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASVenus.RadiusVector (jd);
+		return AASVenus.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -40,4 +40,8 @@ public class VenusModel : PlanetModel{
 		return AASDiameters.VenusSemidiameterA( vectorToEarthCorrected.Length() );
 	}
 
+	public override double GetDistance ()
+	{
+		return AASVenus.RadiusVector (jdeCorrected);
+	}
 }

@@ -17,19 +17,19 @@ public class NeptuneModel : PlanetModel {
 		return "Neptune";
 	}		
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASNeptune.EclipticLongitude (jd);
+		return AASNeptune.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASNeptune.EclipticLatitude (jd);
+		return AASNeptune.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASNeptune.RadiusVector (jd);
+		return AASNeptune.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -42,4 +42,8 @@ public class NeptuneModel : PlanetModel {
 		return AASEllipticalObject.NEPTUNE;
 	}
 
+	public override double GetDistance ()
+	{
+		return AASNeptune.RadiusVector (jdeCorrected);
+	}
 }

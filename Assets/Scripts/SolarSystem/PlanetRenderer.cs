@@ -16,10 +16,11 @@ public abstract class PlanetRenderer : MonoBehaviour {
 
 	private float scale = 40f;
 
+
 	// Use this for initialization
 	void Start () {
 		sim = SimController.instance;
-		distance = .5f * sim.radius;
+		distance = .8f * sim.radius;
 		model = GetModel ();
 
 		SetPosition ();
@@ -28,20 +29,48 @@ public abstract class PlanetRenderer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {		
+		
 		SetPosition ();
-		transform.LookAt(Camera.main.transform);
+
+		SetRotation ();
+
+		SetScale ();
+
 	}
 
 	public void SetPosition(){
 		try{
 			Vec3D v = model.GetRectangularFromEquatorialCoords();
 			transform.localPosition = new Vector3 ((float)v.x,(float) v.y,(float) v.z) * distance;
+
+
 		}catch(NullReferenceException n){
 			
 		}
 	}
 
-	void SetScale(){
-		gameObject.transform.localScale = new Vector3 (scale, scale, scale);
+	private void SetRotation(){
+		//double p = model.GetParallacticAngle ();
+		//transform.localRotation = Quaternion.identity;
+
+
+		transform.localRotation.SetLookRotation( Camera.main.transform.position );
+
+		//transform.localRotation = Quaternion.AngleAxis((float)p-90f, Vector3.forward);
 	}
+
+	protected  void SetScale(){
+		if (sim.exaggeratedBodies) {
+			transform.localScale = new Vector3 (50.0f, 50.0f, 50.0f);
+		} else {
+			double diameter = 2*model.GetSemidiameter ();
+			float appDiameter = (float)diameter * sim.diametersScale;
+			transform.localScale = new Vector3 (appDiameter, appDiameter, appDiameter);
+
+		}
+	}
+
+
+
+
 }

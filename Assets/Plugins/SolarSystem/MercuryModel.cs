@@ -16,19 +16,19 @@ public class MercuryModel : PlanetModel {
 	}		
 
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASMercury.EclipticLongitude (jd);
+		return AASMercury.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASMercury.EclipticLatitude (jd);
+		return AASMercury.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASMercury.RadiusVector (jd);
+		return AASMercury.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -41,4 +41,8 @@ public class MercuryModel : PlanetModel {
 		return AASEllipticalObject.MERCURY;
 	}
 
+	public override double GetDistance ()
+	{
+		return AASMercury.RadiusVector (jdeCorrected);
+	}
 }

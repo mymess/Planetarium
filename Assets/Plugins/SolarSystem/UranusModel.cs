@@ -14,19 +14,19 @@ public class UranusModel : PlanetModel {
 		return "Uranus";
 	}
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASUranus.EclipticLongitude(jd);
+		return AASUranus.EclipticLongitude(JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASUranus.EclipticLatitude (jd);
+		return AASUranus.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASUranus.RadiusVector (jd);
+		return AASUranus.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -37,5 +37,10 @@ public class UranusModel : PlanetModel {
 	protected override AASEllipticalObject GetEllipticalObject ()
 	{
 		return AASEllipticalObject.URANUS;
+	}
+
+	public override double GetDistance ()
+	{
+		return AASUranus.RadiusVector (jdeCorrected);
 	}
 }

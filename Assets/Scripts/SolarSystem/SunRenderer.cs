@@ -47,7 +47,6 @@ public class SunRenderer : MonoBehaviour {
 	void SetPosition(){			
 		Vec3D v = sun.GetRectangularLocalPosition () ;
 		transform.position = new Vector3 ((float)v.x, (float)v.y, (float)v.z) * distance;
-
 	}
 
 

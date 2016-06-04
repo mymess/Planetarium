@@ -13,19 +13,19 @@ public class MarsModel : PlanetModel {
 		return "Mars";
 	}
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASMars.EclipticLongitude (jd);
+		return AASMars.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASMars.EclipticLatitude (jd);
+		return AASMars.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASMars.RadiusVector (jd);
+		return AASMars.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -38,4 +38,8 @@ public class MarsModel : PlanetModel {
 		return AASEllipticalObject.MARS;
 	}
 
+	public override double GetDistance ()
+	{
+		return AASMars.RadiusVector (jdeCorrected);
+	}
 }

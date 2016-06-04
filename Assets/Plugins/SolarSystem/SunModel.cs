@@ -76,15 +76,23 @@ public class SunModel : SolarSystemBody {
 		return AASCoordinateTransformation.MapTo0To360Range (lambda);
 	}
 
-	public double GetDiameter(){
-		return AASDiameters.SunSemidiameterA (AASEarth.RadiusVector(jd));
-	}
-
-
-
 	public override string GetName ()
 	{
 		return "Sun";
 	}
-		
+
+	public override double GetDistance(){		
+		return AASEarth.RadiusVector (jd);
+	}
+
+	protected override double GetRadiusVector (double JD)
+	{
+		return AASEarth.RadiusVector (JD);
+	}
+
+
+	public override double GetSemidiameter ()
+	{
+		return AASDiameters.SunSemidiameterA (GetDistance());
+	}
 }

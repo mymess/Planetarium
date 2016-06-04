@@ -30,11 +30,18 @@ public class MoonRenderer : MonoBehaviour {
 		transform.Rotate (new Vector3 (0, 90, 0));
 
 		SetScale ();	
+
+		SetPosition ();
+
+		Debug.Log (string.Format ("x={0} y={1} z {2}", transform.position.x, transform.position.y, transform.position.z));
 	}
 	
 	// Update is called once per frame
 	void Update () {		
 		SetPosition ();
+		SetScale ();
+
+		transform.localRotation.SetLookRotation( Camera.main.transform.position );
 	}
 
 
@@ -57,15 +64,15 @@ public class MoonRenderer : MonoBehaviour {
 		}
 	}
 
-	void SetScale(){
-		
-		transform.localScale = new Vector3(scale, scale, scale);
-	
+	private  void SetScale(){
+		if (sim.exaggeratedBodies) {
+			transform.localScale = new Vector3 (50.0f, 50.0f, 50.0f);
+		} else {
+			double diameter = 2*moon.GetSemidiameter () / 30;
+			float appDiameter = (float)diameter * sim.diametersScale;
+			transform.localScale = new Vector3 (appDiameter, appDiameter, appDiameter);
+		}
 	}
 
 
-	IEnumerator Pause(float secs)
-	{
-		yield return new WaitForSeconds(secs);
-	}
 }

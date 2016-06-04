@@ -15,19 +15,19 @@ public class JupiterModel : PlanetModel {
 		return "Jupiter";
 	}		
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASJupiter.EclipticLongitude (jd);
+		return AASJupiter.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASJupiter.EclipticLatitude (jd);
+		return AASJupiter.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASJupiter.RadiusVector (jd);
+		return AASJupiter.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -38,5 +38,10 @@ public class JupiterModel : PlanetModel {
 	protected override AASEllipticalObject GetEllipticalObject ()
 	{
 		return AASEllipticalObject.JUPITER;
+	}
+
+	public override double GetDistance ()
+	{
+		return AASJupiter.RadiusVector (jdeCorrected);
 	}
 }

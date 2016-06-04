@@ -14,10 +14,14 @@ public class CoordinatesHUD : MonoBehaviour {
 	private Text azimuthGUI;
 	private Text altitudeGUI;
 
+	private Text parGUI;
+
 	public GameObject ra;
 	public GameObject dec;
 	public GameObject alt;
 	public GameObject az;
+
+	public GameObject par;
 
 	private Component[] textGUIs;
 
@@ -29,6 +33,8 @@ public class CoordinatesHUD : MonoBehaviour {
 		declinationGUI = dec.GetComponent<Text> ();
 		azimuthGUI = az.GetComponent<Text> ();
 		altitudeGUI = alt.GetComponent<Text> ();
+
+		parGUI = par.GetComponent<Text> ();
 
 		skyModel = SimController.instance.skyModel;
 	}
@@ -49,11 +55,15 @@ public class CoordinatesHUD : MonoBehaviour {
 				local.Altitude.Get()
 			);
 
-			
+			double paralacticAngle = skyModel.GetMoon().GetParallacticAngle();
+
+
+
 			raGUI.text = "RA: " + equatorial.RA.ToString ();
 			declinationGUI.text = "Dec: " + equatorial.Declination.ToString ();
 			azimuthGUI.text = "Az: " + local.Azimuth.To0To360Range().ToString ();
 			altitudeGUI.text = "Alt: " + local.Altitude.ToString ();
+			//parGUI.text = "Moon q: " + paralacticAngle;
 		}catch(NullReferenceException n){
 			
 		}

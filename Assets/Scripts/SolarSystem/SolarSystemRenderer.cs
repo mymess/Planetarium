@@ -11,6 +11,9 @@ public class SolarSystemRenderer : MonoBehaviour {
 
 	private SkyModel skyModel;
 
+	private Dictionary<double, double> distances;
+
+
 	private Dictionary<string, Type> map = new Dictionary<string, Type>(){
 		{"Mercury", typeof(MercuryRenderer)},
 		{"Venus", typeof(VenusRenderer)},
@@ -33,12 +36,17 @@ public class SolarSystemRenderer : MonoBehaviour {
 		//DrawPlanets();
 	}
 
+
+
+
 	// Update is called once per frame
 	void Update () {
 
 	}
 
 
+
+	/*
 	void DrawSun(){
 		GameObject sphere = GameObject.Find ("Sun/Sphere");
 		sphere.AddComponent<SunRenderer> ();
@@ -71,6 +79,7 @@ public class SolarSystemRenderer : MonoBehaviour {
 
 		}
 	}
+	*/
 
 
 

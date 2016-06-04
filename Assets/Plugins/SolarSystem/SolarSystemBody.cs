@@ -10,6 +10,14 @@ public abstract class SolarSystemBody{
 
 	public abstract string GetName ();
 
+	//Calculations are to be performed here
+	protected abstract void Update ();
+
+	protected abstract double GetRadiusVector(double JD);
+	public abstract double GetDistance();
+
+	public abstract double GetSemidiameter ();
+
 	//JD
 	protected double jd;
 
@@ -36,23 +44,22 @@ public abstract class SolarSystemBody{
 		Update ();
 	}
 
-	//Calculations are to be performed here
-	protected abstract void Update ();
+
 
 
 	public Vec3D GetRectangularLocalPosition(){
 		double az  = localCoords.Azimuth.Get ();
 		double alt = localCoords.Altitude.Get ();
-		/*
+
 		Vec3D ret = new Vec3D ();
 		ret.x = Math.Cos(alt*M.DEG2RAD)*Math.Sin (az * M.DEG2RAD);
 		ret.y = Math.Sin (alt * M.DEG2RAD);
 		ret.z = Math.Cos (alt * M.DEG2RAD) * Math.Cos(az*M.DEG2RAD);
 
-		//return ret;
-		*/
+		return ret;
 
-		return Vec3D.PolarToRectangular(az, alt);
+
+		//return Vec3D.PolarToRectangular(az, alt);
 	}
 
 
@@ -62,7 +69,7 @@ public abstract class SolarSystemBody{
 
 		float x = Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Sin((float)ra *Mathf.Deg2Rad);
 		float y = Mathf.Sin((float)dec * Mathf.Deg2Rad);
-		float z = Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Cos((float)ra *Mathf.Deg2Rad);
+		float z = -Mathf.Cos((float)dec * Mathf.Deg2Rad) * Mathf.Cos((float)ra *Mathf.Deg2Rad);
 
 
 		return new Vec3D (x, y, z);
@@ -97,10 +104,20 @@ public abstract class SolarSystemBody{
 	}
 
 	//obliquity of the ecliptic
-	protected double GetDeltaEpsilon(){
-		
+	protected double GetDeltaEpsilon(){		
 		return AASNutation.MeanObliquityOfEcliptic(jd);
 	}
 
+
+	public Vec3D GetVectorToEarthCorrected(){
+		return vectorToEarthCorrected;
+	}
+
+
+	public double GetParallacticAngle(){
+		return AASParallactic.ParallacticAngle (localHourAngle, 
+			location.latitude, 
+			equatorialCoords.Declination.Get ());
+	}
 }
 

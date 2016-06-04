@@ -14,19 +14,19 @@ public class SaturnModel : PlanetModel {
 		return "Saturn";
 	}
 
-	public override double GetEclipticLongitude (double jd)
+	public override double GetEclipticLongitude (double JD)
 	{
-		return AASSaturn.EclipticLongitude (jd);
+		return AASSaturn.EclipticLongitude (JD);
 	}
 
-	public override double GetEclipticLatitude (double jd)
+	public override double GetEclipticLatitude (double JD)
 	{
-		return AASSaturn.EclipticLatitude (jd);
+		return AASSaturn.EclipticLatitude (JD);
 	}
 
-	public override double GetRadiusVector (double jd)
+	protected override double GetRadiusVector (double JD)
 	{
-		return AASSaturn.RadiusVector (jd);
+		return AASSaturn.RadiusVector (JD);
 	}
 
 	public override double GetSemidiameter ()
@@ -37,6 +37,11 @@ public class SaturnModel : PlanetModel {
 	protected override AASEllipticalObject GetEllipticalObject ()
 	{
 		return AASEllipticalObject.SATURN;
+	}
+
+	public override double GetDistance ()
+	{
+		return AASNeptune.RadiusVector (jdeCorrected);
 	}
 
 }

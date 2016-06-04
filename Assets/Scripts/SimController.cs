@@ -18,8 +18,6 @@ public class SimController : MonoBehaviour{
 
 	public SkyModel skyModel;
 
-	//public Dictionary<string, PlanetModel> planets;
-
 	public static SimController instance = null; 
 
 	public float radius = 800.0f;
@@ -44,8 +42,11 @@ public class SimController : MonoBehaviour{
 
 	public bool playMode = false;
 	private bool lastPlayMode;
+
 	public float timeScale = 1500f;
 
+	public bool exaggeratedBodies = false;
+	public float diametersScale = .4f;
 
 	void Awake () {
 		
@@ -72,7 +73,7 @@ public class SimController : MonoBehaviour{
 	///2446895.91666667
 
 	void Start(){
-
+		Debug.Log ("------- SUN ------- ");
 		Debug.Log (string.Format("JD: {0}", jd));
 		Debug.Log (string.Format("Time: {0}:{1}:{2}", hour, minute, sec));
 		skyModel.GetSun ().Log ();
@@ -86,29 +87,45 @@ public class SimController : MonoBehaviour{
 
 		Debug.Log (string.Format("local X {0}", local.X ));
 		Debug.Log (string.Format("local Y {0}", local.Y ));
+
+
+		Debug.Log ("------- VENUS ------- ");
+		VenusModel venus = skyModel.GetPlanets () ["Venus"] as VenusModel;
+		venus.Log ();
+
+
+		Debug.Log ("------- MOON ------- ");
+		MoonModel moon = skyModel.GetMoon();
+		moon.Log ();
+
+		Debug.Log ("------- JUPITER ------- ");
+		JupiterModel jup = skyModel.GetPlanets()["Jupiter"] as JupiterModel;
+
+		Debug.Log("p "+ jup.GetParallacticAngle());
+
+
 	}
 
 	void Update () {		
-		if (playMode) {
-			jd += timeScale * Time.deltaTime / 86400f;
+		if (playMode) {			
+
+			this.jd += timeScale * Time.deltaTime / 86400f;
+
 			UpdateLocation ();
+
 			UpdateDateAndTime ();
 
 			skyModel.Update (jd, location);
 
-		} else {			
-			if (!IsPlayModeToggled ()){
-			//if (IsTimeOrLocationUpdated ()) {				
-				UpdateLocation ();
-				UpdateJD ();	
-				skyModel.Update (jd, location);
+		} else {
+			UpdateLocation ();					
+			UpdateJD ();	
 
-				lastPlayMode = playMode;
-			}				
-			//}
+			skyModel.Update (jd, location);
 		}			
 
 		lastJD = jd;
+		lastPlayMode = playMode;
 
 		UpdateLastLocation ();
 	}
@@ -166,7 +183,7 @@ public class SimController : MonoBehaviour{
 	}
 
 	private void UpdateJD(){
-		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
+		double dayDec = (double)day + (double)hour / 24d + (double)minute /1440d + sec / 86400d; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
 	}
 
@@ -182,7 +199,7 @@ public class SimController : MonoBehaviour{
 		return playMode;
 	}
 	public bool IsInspectorUpdated(){
-		double dayDec = day + (double)hour / 24 + (double)minute / 60 + sec / 86400;; 
+		double dayDec = (double)day + (double)hour / 24d + (double)minute / 1440d + sec / 86400d; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
 
 		location.longitude = longitude;

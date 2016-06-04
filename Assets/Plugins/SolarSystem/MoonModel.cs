@@ -38,8 +38,26 @@ public class MoonModel : SolarSystemBody {
 		return "Moon";
 	}
 
-	public double GetDiameter(){
-		//TODO: cambiar por el Topocentric
-		return 2 * AASDiameters.GeocentricMoonSemidiameter (AASMoon.RadiusVector(jd));
+
+
+
+	protected override double GetRadiusVector (double JD)
+	{
+		return AASMoon.RadiusVector (JD);
 	}
+
+	public override double GetDistance(){				
+		return AASMoon.RadiusVector (jd);
+	}
+	//moon semidiameter in arc seconds
+	public override double GetSemidiameter(){
+		return AASDiameters.TopocentricMoonSemidiameter (
+			GetDistance (),
+			equatorialCoords.Declination.Get (),
+			localHourAngle,
+			location.latitude,
+			location.altitude);
+	}
+
+
 }
