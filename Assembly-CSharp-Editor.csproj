@@ -46,6 +46,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+     <Compile Include="Assets\Editor\DateTimeEditor.cs" />
+     <Compile Include="Assets\Editor\DateTimeWindow.cs" />
+     <Compile Include="Assets\Editor\LocationEditor.cs" />
+     <Compile Include="Assets\Editor\LocationSettingsTest.cs" />
+     <Compile Include="Assets\Editor\SettingsEditor.cs" />
+     <None Include="Assets\Monument Valley Terrain\monument valley README.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
  <Reference Include="UnityEngine.Networking">

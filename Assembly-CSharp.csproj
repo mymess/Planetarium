@@ -45,9 +45,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AutoIntensity.cs" />
      <Compile Include="Assets\Scripts\ConstellationLinesRenderer.cs" />
      <Compile Include="Assets\Scripts\ConstellationsRenderer.cs" />
      <Compile Include="Assets\Scripts\CoordinatesHUD.cs" />
+     <Compile Include="Assets\Scripts\SetSunLight.cs" />
+     <Compile Include="Assets\Scripts\Settings\DateTimeSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\GeneralSettings.cs" />
+     <Compile Include="Assets\Scripts\Settings\LocationSettings.cs" />
      <Compile Include="Assets\Scripts\SimController.cs" />
      <Compile Include="Assets\Scripts\SkyGlobeRotator.cs" />
      <Compile Include="Assets\Scripts\SmoothMouseLook.cs" />
@@ -63,6 +68,8 @@
      <Compile Include="Assets\Scripts\SolarSystem\UranusRenderer.cs" />
      <Compile Include="Assets\Scripts\SolarSystem\VenusRenderer.cs" />
      <Compile Include="Assets\Scripts\StarRenderer.cs" />
+     <Compile Include="Assets\Tutorial1\Scripts\LightWall.cs" />
+     <None Include="Assets\Monument Valley Terrain\monument valley README.txt" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
      <None Include="Assets\Standard Assets\Cameras\CameraGuidelines.txt" />
  <Reference Include="UnityEngine.Networking">

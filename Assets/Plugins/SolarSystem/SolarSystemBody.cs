@@ -5,6 +5,9 @@ using System;
 using AASharp;
 using MathUtils;
 
+public enum SolarSystemBodyType{ MERCURY, VENUS, MARS, JUPITER, SATURN, URANUS, NEPTUNE, MOON, SUN};
+
+
 public abstract class SolarSystemBody{
 	
 

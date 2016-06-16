@@ -21,7 +21,7 @@ public class MoonRenderer : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		moon = sim.skyModel.GetMoon();
 
 

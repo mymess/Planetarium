@@ -19,7 +19,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 		go = new GameObject ();
 	}
@@ -32,12 +32,7 @@ public class ConstellationsRenderer : MonoBehaviour {
 
 	void DrawConstellations(){
 		CreateLineMaterial ();
-		lineMaterial.SetPass( 0 );
-
-
-		double jd = SimController.instance.GetJD ();
-		LocationData location = SimController.instance.location;
-
+		lineMaterial.SetPass( 0 );	
 
 		Transform zero = go.transform;
 		zero.position = Vector3.zero;

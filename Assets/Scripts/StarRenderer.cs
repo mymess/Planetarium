@@ -29,11 +29,9 @@ public class StarRenderer : MonoBehaviour {
 	void Start () {
 		ps = gameObject.GetComponent<ParticleSystem> ();
 
-
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 
 		skyModel = sim.skyModel;
-
 
 		CreatePoints ();
 
@@ -44,8 +42,6 @@ public class StarRenderer : MonoBehaviour {
 		
 		points = new ParticleSystem.Particle[ skyModel.GetStars().Count ];
 
-
-	
 		currentStarSize = maxStarSize;
 
 		for(int i = 0; i < skyModel.GetStars().Count; i++){
@@ -80,5 +76,9 @@ public class StarRenderer : MonoBehaviour {
 		ps.SetParticles(points, points.Length);
 	}
 
+
+	void OnParticleCollision(GameObject other) {
+		Debug.Log("Particle was hit!");
+	}
 
 }

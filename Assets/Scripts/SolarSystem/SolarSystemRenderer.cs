@@ -13,6 +13,7 @@ public class SolarSystemRenderer : MonoBehaviour {
 
 	private Dictionary<double, double> distances;
 
+	public enum Planets{MERCURY, VENUS, MARS, JUPITER, SATURN, URANUS, NEPTUNE};
 
 	private Dictionary<string, Type> map = new Dictionary<string, Type>(){
 		{"Mercury", typeof(MercuryRenderer)},
@@ -27,7 +28,7 @@ public class SolarSystemRenderer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 
 		//DrawSun ();

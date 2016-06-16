@@ -6,11 +6,15 @@ using MathUtils;
 
 public class ConstellationLinesRenderer : MonoBehaviour {
 
+	private Color lineColor;
+	public Color LineColor{ get{ return lineColor; } set{ lineColor = value; }}
+
+
 	private Material lineMaterial;
 
-	private Color lineColor = Color.red;
+	private float lineWidth = .2f;
+	public float LineWidth{ get{ return lineWidth; } set{ lineWidth = value; }}
 
-	private float lineWith = .2f;
 
 	private SimController sim;
 
@@ -18,16 +22,14 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 
 	void Start () {
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 
 		DrawConstellations ();
 	}
 
-	void DrawConstellations(){
-
-		//CreateLineMaterial ();
-
+	public void DrawConstellations(){
+		
 		foreach (Constellation constellation in sim.skyModel.GetConstellations()) {
 			GameObject goConst = new GameObject ();
 			goConst.transform.parent = gameObject.transform;
@@ -46,7 +48,7 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 				renderer.SetVertexCount (2);
 				//renderer.material = lineMaterial;
 				renderer.SetColors (lineColor, lineColor);
-				renderer.SetWidth (lineWith, lineWith);
+				renderer.SetWidth (lineWidth, lineWidth);
 
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
@@ -78,10 +80,6 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 			lineMaterial.SetInt ("_ZWrite", 0);
 		}
 	}	
-
-
-	void Update(){			
-
-	}
+		
 		
 }

@@ -47,8 +47,8 @@ public class StarModel{
 	public string gliese;
 	public string bayerFlamsteed;
 	public string properName;
-	public float ra;
-	public float dec;
+	public double ra;
+	public double dec;
 	public double? distance;
 	public double? pmra;
 	public double? pmdecc;
@@ -73,8 +73,8 @@ public class StarModel{
 			int len = data.Length;
 			int.TryParse(data [Star.StarID], out starID);
 			int.TryParse( data [Star.HIP], out hip ) ;
-			float.TryParse(data [Star.RA], out ra);
-			float.TryParse(data [Star.Dec], out dec);
+			double.TryParse(data [Star.RA], out ra);
+			double.TryParse(data [Star.Dec], out dec);
 			float.TryParse(data [Star.Mag], out mag );
 			float.TryParse(data [Star.ColorIndex], out colorIndex);
 			float.TryParse(data [Star.AbsMag], out absMag ) ;

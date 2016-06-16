@@ -19,7 +19,7 @@ public abstract class PlanetRenderer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		distance = .8f * sim.radius;
 		model = GetModel ();
 

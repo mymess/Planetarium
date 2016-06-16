@@ -9,7 +9,9 @@ namespace MathUtils{
 	public class HourAngle{
 
 
-		public double hours;
+		private double hours;
+
+		private double THRESHOLD = .0018519d;
 
 		public HourAngle(){
 		}
@@ -53,9 +55,36 @@ namespace MathUtils{
 		public static HourAngle FromDecimalDegrees(double deg){
 			deg = AASCoordinateTransformation.MapTo0To360Range (deg);
 			double hours = deg / 15.0d;
-			return FromDecimal (hours);
+			return new HourAngle (hours);
 		}
 
+
+		public override bool Equals (object obj)
+		{
+
+			if (obj == null || GetType() != obj.GetType()) {
+				Debug.Log ("Unequal types");
+				return false;
+			}
+			HourAngle other = null;		
+
+			try{
+				other = obj as HourAngle;				
+			}catch(InvalidCastException i){
+				Debug.Log ("Unequal types");
+				return false;
+			}
+
+			double otherAngle = other.Get ();
+
+			return hours > (otherAngle - THRESHOLD) && hours < (otherAngle + THRESHOLD);
+		}
+
+
+		public override int GetHashCode ()
+		{			
+			return (int)Math.Truncate(hours).GetHashCode();
+		}
 
 		public static HourAngle FromDecimal(double hours){
 
@@ -74,6 +103,10 @@ namespace MathUtils{
 				Minutes().ToString().PadLeft(2,'0'), 
 				Math.Round(Seconds(), 2).ToString("00.00"));
 		}
+
+		public void Log(){
+			Debug.Log (this.ToString ());
+		}
 	}
 
 	public class DegreesAngle{
@@ -82,6 +115,8 @@ namespace MathUtils{
 		//public double sec;
 
 		private double degrees;
+
+		private double THRESHOLD = .0277777777d;
 
 		public DegreesAngle(){
 		}
@@ -125,12 +160,44 @@ namespace MathUtils{
 			return Math.Abs(sec);
 		}
 
+		public override bool Equals (object obj)
+		{
+			if (obj == null || GetType() != obj.GetType()) {
+				return false;
+			}
+
+			DegreesAngle other = null;
+
+			try{
+			 	other = obj as DegreesAngle;
+			}catch(InvalidCastException i){
+
+				Debug.Log ("Cast exception ");
+				return false;
+			}
+
+			double otherAngle = other.Get ();
+
+			return degrees > (otherAngle - THRESHOLD) && degrees < (otherAngle + THRESHOLD);
+			
+		}
+
+		public override int GetHashCode ()
+		{
+			int deg = (int)Math.Truncate(degrees);
+			return deg.GetHashCode ();
+		}
+
 
 		public override string ToString(){
 			return string.Format ("{0:D2}º {1:D2}' {2:D2}\"", 
 				Degrees().ToString("00").PadLeft(2,'0'), 
 				Minutes().ToString("00").PadLeft(2,'0'), 
 				Math.Round(Seconds(), 2).ToString("00.00"));
+		}
+
+		public void Log(){
+			Debug.Log (this.ToString ());
 		}
 	}
 
@@ -156,6 +223,38 @@ namespace MathUtils{
 
 			return new Vec3D(x, y, z);
 			*/
+		}
+
+
+		public override bool Equals (object obj)
+		{
+			if (obj == null) {
+				return false;
+			}
+			EquatorialCoords otherEq = null;
+
+			try{
+			 	otherEq = obj as EquatorialCoords;
+			}catch(InvalidCastException i){
+				Debug.Log ("Invalid cast");
+				return false;
+			}
+
+			return RA.Equals (otherEq.RA) && Declination.Equals (otherEq.Declination);
+		}
+
+		//
+
+		public override int GetHashCode ()
+		{
+			int hash = 23 * RA.GetHashCode ();
+			hash = hash * 31 + Declination.GetHashCode ();
+			return  hash;
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("RA: {0}\nDec: {1}", RA.ToString(), Declination.ToString());
 		}
 
 	}

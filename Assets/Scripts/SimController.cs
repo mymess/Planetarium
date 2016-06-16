@@ -14,75 +14,76 @@ using AASharp;
 using MathUtils;
 
 
-public class SimController : MonoBehaviour{
+public sealed class SimController : MonoBehaviour{
 
 	public SkyModel skyModel;
 
-	public static SimController instance = null; 
+	public GameObject constellations;
+
+
+	private static SimController instance = null;
+	public static SimController INSTANCE { get { return instance; }}
+
 
 	public float radius = 800.0f;
 
-	private double lastJD;
-	private double jd;
+	private decimal lastJD;
+	public LocationData lastLocation;
 
-	public long year = 1987;
-	public long month = 4;
-	public long day = 10;
+	public DateTimeSettings dt;
+	public DateTimeSettings DT
+	{ 
+		get { return dt; }
+	}
 
-	public long hour = 10;
-	public long minute = 0;
-	public double sec = 0.0;
+	public LocationSettings location;
+	public LocationSettings Location { 
+		get { return location; } 
+	}
 
-	public double longitude = 0.0;
-	public double latitude = 40.0;
-	public double altitude = 100;
 
-	private LocationData lastLocation;
-	public LocationData location;
+	public GeneralSettings settings;
+	public GeneralSettings Settings{ get{ return settings; }}
 
-	public bool playMode = false;
-	private bool lastPlayMode;
-
-	public float timeScale = 1500f;
 
 	public bool exaggeratedBodies = false;
 	public float diametersScale = .4f;
 
-	void Awake () {
-		
-		if (instance == null) {
+
+	void Awake () {		
+		if(instance == null){
 			instance = this;
-		} 
+		}
+		skyModel = new SkyModel((double)dt.JulianDay(), ToLocationData(location));
+	}
 
-		UpdateJD ();
-		UpdateLocation ();
-		UpdateLastLocation ();
+	private LocationData ToLocationData(LocationSettings location){
+		 return new LocationData (location.Longitude, location.Latitude, (double)location.Altitude);
+	}
 
-		lastJD = jd;
 
-		lastPlayMode = playMode;
-
-		skyModel = new SkyModel(jd, location);
-
+	void Start(){
 		//stars
 		ParseStarsRaw ();
 		ParseConstellations ();
 
+		lastJD       = dt.JulianDay ();
+		lastLocation = ToLocationData (location);
+
+		//Log();
 	}
 
-	///2446895.91666667
-
-	void Start(){
+	void Log(){
 		Debug.Log ("------- SUN ------- ");
-		Debug.Log (string.Format("JD: {0}", jd));
-		Debug.Log (string.Format("Time: {0}:{1}:{2}", hour, minute, sec));
+		Debug.Log (string.Format("JD: {0}", dt.JulianDay()));
+		Debug.Log (string.Format("Time: {0}:{1}:{2}", dt.Hour(), dt.Minute(), dt.Second()));
 		skyModel.GetSun ().Log ();
 		HourAngle H = new HourAngle (skyModel.GetSun ().localHourAngle);
 		Debug.Log (string.Format("H {0}", H.ToString() ));
 
 		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (skyModel.GetSun ().localHourAngle, 
 			skyModel.GetSun().equatorialCoords.Declination.Get(), 
-			location.latitude);
+			location.Latitude);
 
 
 		Debug.Log (string.Format("local X {0}", local.X ));
@@ -103,51 +104,33 @@ public class SimController : MonoBehaviour{
 
 		Debug.Log("p "+ jup.GetParallacticAngle());
 
+	}
+
+
+	void Update () {
+		if (dt.playMode || IsTimeOrLocationUpdated ()) {
+			skyModel.Update ((double)dt.JulianDay (), ToLocationData (location));
+		} 
+
 
 	}
 
-	void Update () {		
-		if (playMode) {			
+	void UpdateSettings(){
+		constellations.SetActive( settings.DisplayConstellations );
+		ConstellationLinesRenderer constellationsRenderer = constellations.GetComponent<ConstellationLinesRenderer> ();
+		constellationsRenderer.LineColor = settings.ConstellationsColor;
+		constellationsRenderer.DrawConstellations ();
 
-			this.jd += timeScale * Time.deltaTime / 86400f;
-
-			UpdateLocation ();
-
-			UpdateDateAndTime ();
-
-			skyModel.Update (jd, location);
-
-		} else {
-			UpdateLocation ();					
-			UpdateJD ();	
-
-			skyModel.Update (jd, location);
-		}			
-
-		lastJD = jd;
-		lastPlayMode = playMode;
-
-		UpdateLastLocation ();
 	}
 
 	void LateUpdate(){		
 		RotateSkyGlobe ();
+		//UpdateSettings ();
 	}
-
-	private bool IsPlayModeToggled(){
-		return playMode != lastPlayMode;
-	}
-
+		
 
 	private void UpdateDateAndTime(){
-		AASDate date = new AASDate (jd, true);
-		year = date.Year;
-		month = date.Month;
-		day = date.Day;
-		hour = date.Hour;
-		minute = date.Minute;
-		sec = date.Second;
-
+		AASDate date = new AASDate ((double)dt.JulianDay(), true);
 	}
 		
 
@@ -156,7 +139,7 @@ public class SimController : MonoBehaviour{
 		gameObject.transform.rotation = Quaternion.identity;
 
 		//correction for latitude		
-		double colatitude = 90.0d - location.latitude;
+		double colatitude = 90.0d - location.Latitude;
 
 		//topocentric vector of earth axis
 		Vector3 earthAxis = skyModel.GetEarthAxis ();
@@ -168,9 +151,10 @@ public class SimController : MonoBehaviour{
 		gameObject.transform.Rotate ((float) colatitude, 0.0f, 0.0f);
 	}
 
+
 	public bool IsTimeOrLocationUpdated(){	
 		try{	
-			return lastJD != jd || !location.Equals (lastLocation);
+			return lastJD != dt.JulianDay() || !location.Equals (lastLocation);
 		}catch(NullReferenceException n){
 			Debug.Log ("NPE en SiMController");
 			return false;	
@@ -181,23 +165,15 @@ public class SimController : MonoBehaviour{
 	public bool IsLocationUpdated(){
 		return !location.Equals (lastLocation);
 	}
+		
 
-	private void UpdateJD(){
-		double dayDec = (double)day + (double)hour / 24d + (double)minute /1440d + sec / 86400d; 
-		jd = AASDate.DateToJD (year, month, dayDec, true);
-	}
 
-	private void UpdateLocation(){
-		location = new LocationData (longitude, latitude, altitude);
-	}
-
-	private void UpdateLastLocation(){
-		lastLocation = new LocationData (longitude, latitude, altitude);
-	}
-
+	/*
 	public bool IsPlayMode(){
 		return playMode;
 	}
+
+
 	public bool IsInspectorUpdated(){
 		double dayDec = (double)day + (double)hour / 24d + (double)minute / 1440d + sec / 86400d; 
 		jd = AASDate.DateToJD (year, month, dayDec, true);
@@ -214,7 +190,7 @@ public class SimController : MonoBehaviour{
 	public static bool IsReady(){
 		return instance != null;
 	}
-
+	*/
 
 	private void ParseStarsRaw(){
 		
@@ -247,6 +223,8 @@ public class SimController : MonoBehaviour{
 		skyModel.SetStars (stars);
 
 		skyModel.SetReverseMapping (reverseMapping);
+
+		skyModel.PopulateStarDictionary ();
 	}
 
 
@@ -279,11 +257,11 @@ public class SimController : MonoBehaviour{
 	}
 
 
-	public double GetJD(){
-		return jd;
+	public decimal GetJD(){
+		return dt.JulianDay();
 	}
 
-	public LocationData GetLocation(){
+	public LocationSettings GetLocation(){
 		return location;
 	}
 		

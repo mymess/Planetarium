@@ -11,9 +11,13 @@ using MathUtils;
 
 
 
+
 public class SkyModel  {
 
-	private List<StarModel> stars;// { get; set;}
+
+	public static SkyModel INSTANCE;
+
+	private List<StarModel> stars;
 
 	//reverse Mapping HIP index -> array index (used in constellations rendering)
 	private int[] reverseMapping;
@@ -22,23 +26,27 @@ public class SkyModel  {
 
 	private Dictionary<string, PlanetModel> planets;
 
+	//will be used in picking stars
+	private Dictionary<EquatorialCoords, int> starDictionary { get; set;}
+
+
+
 	private SunModel sun;
 
 	private MoonModel moon;
 
-	public static SkyModel instance;
 	private LocationData location;
 	private double jd;
 
 
 	public SkyModel(double julianDay, LocationData location){
-		
-		if (instance == null) {
-			instance = this;
+			
+		if (INSTANCE == null) {
+			INSTANCE = this;
 		}
 
 		this.location = location;
-		this.jd = julianDay;
+		this.jd =  julianDay;
 
 		sun               = new SunModel (jd, location);
 		moon        	  = new MoonModel (jd, location);
@@ -59,6 +67,8 @@ public class SkyModel  {
 		planets["Uranus"]  = uranusModel;
 		planets["Neptune"] = neptuneModel;
 
+
+		starDictionary = new Dictionary<EquatorialCoords, int> ();
 
 	}
 
@@ -87,6 +97,34 @@ public class SkyModel  {
 
 		sun.Update (jd, location);
 		moon.Update (jd, location);
+	}
+
+
+	public void PopulateStarDictionary(){
+		foreach (StarModel star in stars) {
+			DegreesAngle dec = new DegreesAngle (star.dec);
+			HourAngle ra = new HourAngle (star.ra);
+
+			EquatorialCoords eq = new EquatorialCoords (ra, dec);
+
+			starDictionary [eq] = star.starID - 1;
+		}			
+	}
+
+
+	public StarModel FindStar(EquatorialCoords eq){
+
+		int index = 0;
+
+		if (starDictionary.TryGetValue(eq, out index)){
+			Debug.Log ("index -> "+ index);
+			return stars [ index ];	
+		}
+
+		Debug.Log (eq.ToString());
+		Debug.Log ("index -> "+ index);
+
+		return null;
 	}
 
 

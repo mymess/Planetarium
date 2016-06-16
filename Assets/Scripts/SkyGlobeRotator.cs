@@ -15,12 +15,12 @@ public class SkyGlobeRotator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		sim = SimController.instance;
+		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 
 
-		LocationData location = sim.GetLocation ();
-		double angle = 90.0d-location.latitude;
+		LocationSettings location = sim.GetLocation ();
+		double angle = 90.0d-location.Latitude;
 
 		earthAxis = new Vector3 (0.0f, (float) Math.Sin (angle * M.DEG2RAD), (float)Math.Cos (angle * M.DEG2RAD));
 
@@ -42,7 +42,7 @@ public class SkyGlobeRotator : MonoBehaviour {
 		double jd = skyModel.GetJD ();
 		LocationData location = skyModel.GetLocation ();
 
-		if (sim.IsPlayMode () && sim.IsLocationUpdated ()) {
+		if (sim.DT.playMode  && sim.IsLocationUpdated ()) {
 			//reset
 			gameObject.transform.rotation = Quaternion.identity;
 
@@ -59,7 +59,7 @@ public class SkyGlobeRotator : MonoBehaviour {
 			gameObject.transform.Rotate (0.0f, (float)hourAngleRotationInDegrees, 0.0f);
 			gameObject.transform.Rotate ((float) latitudeRotationAngle, 0.0f, 0.0f);
 
-		} else if (!sim.IsPlayMode() && sim.IsTimeOrLocationUpdated ()) {
+		} else if (!sim.DT.playMode && sim.IsTimeOrLocationUpdated ()) {
 			//reset
 			gameObject.transform.rotation = Quaternion.identity;
 

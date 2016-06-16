@@ -237,10 +237,6 @@ public abstract class PlanetModel : SolarSystemBody{
 			);
 	}
 
-	public double GetParallacticAngle(){
-		return AASParallactic.ParallacticAngle (localHourAngle, 
-			location.latitude, 
-			equatorialCoords.Declination.Get ());
-	}
+
 
 }

@@ -1,15 +1,18 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SkyModel.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/SkyModel.cs">
     <Files>
-      <File FileName="Assets/Scripts/StarRenderer.cs" Line="64" Column="45" />
-      <File FileName="Assets/Standard Assets/Cameras/Scripts/FreeLookCam.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/SimController.cs" Line="83" Column="7" />
-      <File FileName="Assets/Scripts/LineRendererTest.cs" Line="78" Column="4" />
-      <File FileName="Assets/Scripts/ConstellationsRenderer.cs" Line="22" Column="26" />
-      <File FileName="Assets/Scripts/SkyModel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/SmoothMouseLook.cs" Line="157" Column="1" />
-      <File FileName="Assets/Scripts/ConstellationLinesRenderer.cs" Line="73" Column="1" />
+      <File FileName="Assets/Scripts/SimController.cs" Line="119" Column="1" />
+      <File FileName="Assets/Scripts/SmoothMouseLook.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SolarSystem/PlanetRenderer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SolarSystem/MoonRenderer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SolarSystem/NeptuneRenderer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SolarSystem/MercuryRenderer.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/SolarSystem/MoonModel.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/SolarSystem/SolarSystemBody.cs" Line="8" Column="90" />
+      <File FileName="Assets/Plugins/SolarSystem/PlanetModel.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Utils.cs" Line="14" Column="33" />
+      <File FileName="Assets/Plugins/SkyModel.cs" Line="27" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
