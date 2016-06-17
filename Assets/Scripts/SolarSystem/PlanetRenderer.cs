@@ -63,7 +63,7 @@ public abstract class PlanetRenderer : MonoBehaviour {
 		if (sim.exaggeratedBodies) {
 			transform.localScale = new Vector3 (50.0f, 50.0f, 50.0f);
 		} else {
-			double diameter = 2*model.GetSemidiameter ();
+			double diameter = 2 * model.GetSemidiameter ();
 			float appDiameter = (float)diameter * sim.diametersScale;
 			transform.localScale = new Vector3 (appDiameter, appDiameter, appDiameter);
 

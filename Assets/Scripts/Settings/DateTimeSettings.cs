@@ -12,7 +12,7 @@ public sealed class DateTimeSettings : MonoBehaviour
 {
 	private decimal jd;
 
-	private static DateTimeSettings instance = new DateTimeSettings();
+	private static DateTimeSettings instance;
 
 	public static DateTimeSettings INSTANCE { get { return instance; } }
 
@@ -72,17 +72,6 @@ public sealed class DateTimeSettings : MonoBehaviour
 					NATURAL, ONE_MINUTE_PER_SECOND, ONE_HOUR_PER_SECOND, ONE_DAY_PER_SECOND, 
 					ONE_WEEK_PER_SECOND, ONE_MONTH_PER_SECOND, ONE_YEAR_PER_SECOND
 				};
-				/*
-				yield return NONE;
-				yield return NATURAL;
-				yield return ONE_MINUTE_PER_SECOND;
-				yield return ONE_HOUR_PER_SECOND;
-				yield return ONE_DAY_PER_SECOND;
-				yield return ONE_WEEK_PER_SECOND;
-				yield return ONE_MONTH_PER_SECOND;
-				yield return ONE_YEAR_PER_SECOND;
-
-			}*/
 			}
 		}
 
@@ -185,17 +174,21 @@ public sealed class DateTimeSettings : MonoBehaviour
 		if (!useUTC) {
 			int secondInt  = (int) Math.Truncate (second);
 			int milisecond = (int) ((second - secondInt)*1000);
-			DateTime utc = new DateTime(year, month, day, hour, minute, secondInt, milisecond);
-			utc.ToUniversalTime ();
+			try{
+				DateTime utc = new DateTime(year, month, day, hour, minute, secondInt, milisecond);
+				utc.ToUniversalTime ();
 
-			year  = utc.Year;
-			month = utc.Month;
-			day   = utc.Day;
-			hour  = utc.Hour;
-			minute = utc.Minute;
-			second = utc.Second + utc.Millisecond / 1000.0d;
+				year  = utc.Year;
+				month = utc.Month;
+				day   = utc.Day;
+				hour  = utc.Hour;
+				minute = utc.Minute;
+				second = utc.Second + utc.Millisecond / 1000.0d;
 
-			localDatetime = utc.ToLocalTime ();
+				localDatetime = utc.ToLocalTime ();
+			}catch(ArgumentOutOfRangeException a){
+				
+			}
 		}
 
 		double dayDec = day + hour / HOURS_PER_DAY + minute / MINUTES_PER_DAY + second / SECONDS_PER_DAY;

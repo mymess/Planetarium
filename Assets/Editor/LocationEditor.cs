@@ -102,7 +102,7 @@ public class LocationEditor : Editor {
 		resultIndex = EditorGUILayout.Popup(resultIndex, resultsArray, style, dropdownOptions);
 		GUILayout.EndHorizontal ();
 
-		if(searchResults.Count > 0){
+		if(searchResults.Count > 0 && !IsLocationBeingEdited()){
 			LocationSettings.City city = searchResults[resultIndex];
 			locSettings.Latitude  = city.latitude;
 			locSettings.Longitude = -city.longitude;
@@ -244,20 +244,19 @@ public class LocationEditor : Editor {
 		GUILayout.EndVertical();
 
 		locSettings.UpdateLongitude (lonDegrees, lonMinutes, lonSeconds, toggleWestEast);
-
-		if(IsLocationBeingEdited()){			
+		/*
+		if(!IsLocationBeingEdited()){			
 			GUI.FocusControl (SEARCH_INPUT);
 			locSettings.searchInput = "";
 			Repaint ();
 		}
-
+		*/
 	}
 
 	private bool IsLocationBeingEdited(){
 		string focus = GUI.GetNameOfFocusedControl ();
 		return LONGITUDE_DEGREES.Equals (focus) || LONGITUDE_MINUTES.Equals (focus) || LONGITUDE_SECONDS.Equals (focus)
-		|| LATITUDE_DEGREES.Equals (focus) || LATITUDE_MINUTES.Equals (focus) || LATITUDE_SECONDS.Equals (focus)
-			|| toggleNorthSouth || toggleWestEast;
+		|| LATITUDE_DEGREES.Equals (focus) || LATITUDE_MINUTES.Equals (focus) || LATITUDE_SECONDS.Equals (focus);
 	}
 
 }

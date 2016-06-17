@@ -12,7 +12,7 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 	private Material lineMaterial;
 
-	private float lineWidth = .2f;
+	private float lineWidth;
 	public float LineWidth{ get{ return lineWidth; } set{ lineWidth = value; }}
 
 
@@ -25,10 +25,15 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 
-		DrawConstellations ();
+		lineMaterial       = new Material (Shader.Find("Standard"));
+		lineMaterial.EnableKeyword("_EMISSION");
+		lineMaterial.SetColor("_EmissionColor",  sim.Settings.ConstellationsColor);
+		lineColor = sim.Settings.ConstellationsColor;
+
+		GenerateConstellations ();
 	}
 
-	public void DrawConstellations(){
+	public void GenerateConstellations(){
 		
 		foreach (Constellation constellation in sim.skyModel.GetConstellations()) {
 			GameObject goConst = new GameObject ();
@@ -46,9 +51,10 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 				renderer.useWorldSpace = false; //essential to make 
 				renderer.name = "line_"+i;
 				renderer.SetVertexCount (2);
-				//renderer.material = lineMaterial;
+				renderer.material = lineMaterial;
 				renderer.SetColors (lineColor, lineColor);
 				renderer.SetWidth (lineWidth, lineWidth);
+				renderer.enabled = true;
 
 				StarModel star1 = stars [reverseMapping [line [0]]];
 				StarModel star2 = stars [reverseMapping [line [1]]];
@@ -61,6 +67,37 @@ public class ConstellationLinesRenderer : MonoBehaviour {
 
 	}
 
+
+	void Update(){
+		if (sim.Settings.ConstellationSettingsChanged) {							
+			Redraw ();
+		}
+
+	}
+
+	public void Redraw(){		
+		
+		lineColor          = sim.Settings.ConstellationsColor;
+		//lineMaterial.SetColor ("_EmissionColor", lineColor);
+		lineMaterial.SetColor("_EmissionColor", lineColor);
+		//Debug.Log ("COLOR: " + lineColor.ToString ());
+
+		lineWidth = sim.Settings.ConstellationLineWidth;
+		foreach (Transform constellation in transform) {				
+			foreach(Transform line in constellation){
+				LineRenderer lr = line.gameObject.GetComponent<LineRenderer> () as LineRenderer;
+				lr.SetColors (lineColor, lineColor);
+				lr.SetWidth (lineWidth, lineWidth);
+				lr.material = lineMaterial;
+			}
+		}
+	}
+
+	public void SetActive(bool isActive){
+		foreach (Transform child in gameObject.transform) {
+			child.gameObject.SetActive (isActive);
+		}
+	}
 
 	void CreateLineMaterial ()
 	{

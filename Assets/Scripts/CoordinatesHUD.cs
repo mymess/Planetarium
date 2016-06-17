@@ -14,18 +14,23 @@ public class CoordinatesHUD : MonoBehaviour {
 	private Text azimuthGUI;
 	private Text altitudeGUI;
 
-	private Text parGUI;
+	private Text fovGUI;
 
 	public GameObject ra;
 	public GameObject dec;
 	public GameObject alt;
 	public GameObject az;
 
-	public GameObject par;
+	public GameObject fov;
 
 	private Component[] textGUIs;
 
 	private SkyModel skyModel;
+
+	private SimController sim;
+
+	private Color hudColor;
+
 
 	// Use this for initialization
 	void Start () {		
@@ -34,9 +39,10 @@ public class CoordinatesHUD : MonoBehaviour {
 		azimuthGUI = az.GetComponent<Text> ();
 		altitudeGUI = alt.GetComponent<Text> ();
 
-		parGUI = par.GetComponent<Text> ();
+		fovGUI = fov.GetComponent<Text> ();
 
 		skyModel = SimController.INSTANCE.skyModel;
+		sim = SimController.INSTANCE;
 	}
 	
 	// Update is called once per frame
@@ -62,13 +68,6 @@ public class CoordinatesHUD : MonoBehaviour {
 				Debug.Log("Clicked at: "  );
 				Debug.Log("RA:" + equatorial.RA.Get());
 				Debug.Log("Decl:" + equatorial.Declination.Get());
-
-				if(star != null){
-					parGUI.text = "Hipparcos index: " + star.hip;
-					Debug.Log("Hipparcos index: " + star.hip);
-				}else{
-					Debug.Log("nothing found");
-				}
 			}
 
 
@@ -76,9 +75,11 @@ public class CoordinatesHUD : MonoBehaviour {
 			declinationGUI.text = "Dec: " + equatorial.Declination.ToString ();
 			azimuthGUI.text = "Az: " + local.Azimuth.To0To360Range().ToString ();
 			altitudeGUI.text = "Alt: " + local.Altitude.ToString ();
-			//parGUI.text = "Moon q: " + paralacticAngle;
+			fovGUI.text = "FOV: " + Camera.main.fieldOfView + "º";
 
-
+			raGUI.color = declinationGUI.color = 
+				azimuthGUI.color = altitudeGUI.color = 
+					fovGUI.color = sim.Settings.MouseHudColor;
 
 
 		}catch(NullReferenceException n){

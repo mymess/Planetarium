@@ -20,6 +20,7 @@ public sealed class SimController : MonoBehaviour{
 
 	public GameObject constellations;
 
+	public Canvas mouseHud;
 
 	private static SimController instance = null;
 	public static SimController INSTANCE { get { return instance; }}
@@ -28,7 +29,7 @@ public sealed class SimController : MonoBehaviour{
 	public float radius = 800.0f;
 
 	private decimal lastJD;
-	public LocationData lastLocation;
+	private LocationSettings lastLocation;
 
 	public DateTimeSettings dt;
 	public DateTimeSettings DT
@@ -68,7 +69,7 @@ public sealed class SimController : MonoBehaviour{
 		ParseConstellations ();
 
 		lastJD       = dt.JulianDay ();
-		lastLocation = ToLocationData (location);
+		lastLocation = location;
 
 		//Log();
 	}
@@ -109,17 +110,29 @@ public sealed class SimController : MonoBehaviour{
 
 	void Update () {
 		if (dt.playMode || IsTimeOrLocationUpdated ()) {
-			skyModel.Update ((double)dt.JulianDay (), ToLocationData (location));
+			if( skyModel!=null ){
+				skyModel.Update ((double)dt.JulianDay (), ToLocationData (location));
+			}
 		} 
 
+		lastLocation = location;
+		lastJD = dt.JulianDay ();
 
+		UpdateSettings ();
 	}
 
 	void UpdateSettings(){
-		constellations.SetActive( settings.DisplayConstellations );
-		ConstellationLinesRenderer constellationsRenderer = constellations.GetComponent<ConstellationLinesRenderer> ();
-		constellationsRenderer.LineColor = settings.ConstellationsColor;
-		constellationsRenderer.DrawConstellations ();
+		constellations.SetActive (settings.DisplayConstellations);
+		ConstellationLinesRenderer lr = constellations.GetComponent<ConstellationLinesRenderer> ();
+		if (settings.ConstellationSettingsChanged) {
+			lr.Redraw ();
+		}
+
+		mouseHud.enabled = settings.ShowMouseHud;
+		if(settings.MouseHudChanged){
+			
+		}
+
 
 	}
 

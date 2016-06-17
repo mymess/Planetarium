@@ -12,7 +12,7 @@ using AASharp;
 public sealed class LocationSettings : MonoBehaviour {
 
 
-	private static LocationSettings instance = new LocationSettings();
+	private static LocationSettings instance;
 	public static LocationSettings INSTANCE
 	{
 		get 
