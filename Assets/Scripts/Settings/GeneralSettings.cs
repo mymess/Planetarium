@@ -40,7 +40,7 @@ public class GeneralSettings : MonoBehaviour {
 		constellationsColor = new Color(1f, 0f, 0f, 0f);
 		constellationLineWidth = .35f;
 		mouseHudColor = Color.white;
-		mouseHudColor.a = 0f;
+
 	}
 	
 

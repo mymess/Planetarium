@@ -68,9 +68,11 @@ public class MoonRenderer : MonoBehaviour {
 		if (sim.exaggeratedBodies) {
 			transform.localScale = new Vector3 (50.0f, 50.0f, 50.0f);
 		} else {
-			double diameter = 2*moon.GetSemidiameter () / 30;
-			float appDiameter = (float)diameter * sim.diametersScale;
-			transform.localScale = new Vector3 (appDiameter, appDiameter, appDiameter);
+			if (moon!=null) {
+				double diameter = 2 * moon.GetSemidiameter () / 30;
+				float appDiameter = (float)diameter * sim.diametersScale;
+				transform.localScale = new Vector3 (appDiameter, appDiameter, appDiameter);
+			}
 		}
 	}
 

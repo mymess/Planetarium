@@ -107,14 +107,15 @@ public class DateTimeEditor : Editor {
 		dt.playMode = GUILayout.Toggle (dt.playMode, playPauseTex, "Button", options);
 
 		if (dt.playMode) {						
-			playPauseTex = pauseTex;
+			playPauseTex = playTex;
+
 			decimal deltaTime = Convert.ToDecimal (EditorApplication.timeSinceStartup - lastUpdate);
 			dt.Play ( deltaTime );
 
 			Repaint ();
 		} else {	
+			playPauseTex = pauseTex;
 			Repaint ();
-			playPauseTex = playTex;
 		}
 
 

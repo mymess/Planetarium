@@ -237,7 +237,7 @@ public sealed class SimController : MonoBehaviour{
 
 		skyModel.SetReverseMapping (reverseMapping);
 
-		skyModel.PopulateStarDictionary ();
+		skyModel.PopulateStarPositionsDictionary ();
 	}
 
 

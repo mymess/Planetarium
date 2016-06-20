@@ -3,10 +3,13 @@ using System.Collections;
 
 public class MercuryRenderer : PlanetRenderer{
 
+	protected override void Awake(){
+		base.Awake ();
+	}
 
 	protected override PlanetModel GetModel ()
 	{
-		return sim.skyModel.GetPlanets()["Mercury"] as MercuryModel;
+		return skyModel.GetPlanets()["Mercury"] as MercuryModel;
 	}
 
 }

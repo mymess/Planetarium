@@ -39,7 +39,7 @@ public class Star{
 
 
 //["25", "25", "224750", "9077", "", "", "", "0.00529102", "-44.29029741", "72.7802037845706", "58.36", "-108.64", "3", "6.28", "1.96993366361766", "G3IV", "0.763", "52.09682", "0.07216", "-50.82198", "-2.4597e-05", "2.0556e-05", "-2.9579e-05"],
-public class StarModel{
+public class StarModel : CelestialBody{
 	public int starID;
 	public int hip;
 	public int? hd;
@@ -49,20 +49,20 @@ public class StarModel{
 	public string properName;
 	public double ra;
 	public double dec;
-	public double? distance;
-	public double? pmra;
-	public double? pmdecc;
-	public double? rv;
+	public double distance;
+	public double pmra;
+	public double pmdecc;
+	public double rv;
 	public float mag;
 	public float absMag;
 	public string spectrum;
 	public float colorIndex;
-	public double? x;
-	public double? y;
-	public double? z;
-	public double? vx;
-	public double? vy;
-	public double? vz;
+	public double x;
+	public double y;
+	public double z;
+	public double vx;
+	public double vy;
+	public double vz;
 
 	//local coords
 	public double az;
@@ -78,7 +78,13 @@ public class StarModel{
 			float.TryParse(data [Star.Mag], out mag );
 			float.TryParse(data [Star.ColorIndex], out colorIndex);
 			float.TryParse(data [Star.AbsMag], out absMag ) ;
-			spectrum = Star.Spectrum<len? data [Star.Spectrum] :null ;
+			double.TryParse(data[Star.Distance], out distance);
+			bayerFlamsteed = data[Star.BayerFlamsteed];
+			properName = data[Star.ProperName];
+			gliese = data[Star.Gliese];
+			float.TryParse(data[Star.ColorIndex], out colorIndex);
+
+			spectrum = data[Star.Spectrum];
 
 		}catch(FormatException pe){
 			Debug.Log (string.Format("EXCEPTION: {0}", pe.ToString()));
@@ -93,7 +99,10 @@ public class StarModel{
 		Debug.Log (string.Format("StardId {0} {1} {2} {3} {4} {5} {6}", starID, hip, ra, dec, mag, absMag, spectrum));
 	}
 
-
+	public override string ToString ()
+	{
+		return string.Format ("Star");
+	}
 
 	public Vector3 GetEquatorialRectangularCoords(){
 		/*

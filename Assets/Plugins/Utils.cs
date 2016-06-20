@@ -11,7 +11,7 @@ namespace MathUtils{
 
 		private double hours;
 
-		private double THRESHOLD = .0018519d;
+		private double THRESHOLD = .00918519d;//.0018519d;
 
 		public HourAngle(){
 		}
@@ -116,7 +116,7 @@ namespace MathUtils{
 
 		private double degrees;
 
-		private double THRESHOLD = .0277777777d;
+		private double THRESHOLD = .0927777d;//.0277777777d;
 
 		public DegreesAngle(){
 		}
@@ -201,7 +201,7 @@ namespace MathUtils{
 		}
 	}
 
-	public class EquatorialCoords{
+	public class EquatorialCoords {
 		public HourAngle RA = new HourAngle();
 		public DegreesAngle Declination = new DegreesAngle();
 
@@ -235,7 +235,9 @@ namespace MathUtils{
 
 			try{
 			 	otherEq = obj as EquatorialCoords;
+
 			}catch(InvalidCastException i){
+				
 				Debug.Log ("Invalid cast");
 				return false;
 			}
@@ -255,6 +257,15 @@ namespace MathUtils{
 		public override string ToString ()
 		{
 			return string.Format ("RA: {0}\nDec: {1}", RA.ToString(), Declination.ToString());
+		}
+
+		public bool EqualsThreshold(EquatorialCoords eq, double threshold){
+			double ra  = RA.Get ();
+			double dec = Declination.Get ();
+
+			//threshold in degrees
+			return (ra-threshold/15d) < eq.RA.Get() &&  eq.RA.Get() < (ra + threshold/15d) 
+				&& (dec-threshold) < eq.Declination.Get() &&  eq.Declination.Get() < (dec + threshold);
 		}
 
 	}
@@ -343,6 +354,11 @@ namespace MathUtils{
 				return false;
 			}
 			return otherLocation.latitude == this.latitude && otherLocation.longitude == this.longitude;
+		}
+
+		public override int GetHashCode ()
+		{
+			return base.GetHashCode ();
 		}
 	}
 

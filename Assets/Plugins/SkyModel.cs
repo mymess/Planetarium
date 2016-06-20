@@ -26,8 +26,17 @@ public class SkyModel  {
 
 	private Dictionary<string, PlanetModel> planets;
 
-	//will be used in picking stars
-	private Dictionary<EquatorialCoords, int> starDictionary { get; set;}
+	//will be used in picking stars: eq coords -> star Id
+	private Dictionary<EquatorialCoords, int> starPositionsDictionary { get; set;}
+
+	private Dictionary<EquatorialCoords, PlanetModel> planetPositionsDictionary { get; set;}
+
+
+
+	public enum CelestialBodyType
+	{
+		SUN, MOON, PLANET, STAR
+	}
 
 
 
@@ -68,7 +77,9 @@ public class SkyModel  {
 		planets["Neptune"] = neptuneModel;
 
 
-		starDictionary = new Dictionary<EquatorialCoords, int> ();
+		starPositionsDictionary = new Dictionary<EquatorialCoords, int> ();
+		planetPositionsDictionary = new Dictionary<EquatorialCoords, PlanetModel> ();
+
 
 	}
 
@@ -100,29 +111,71 @@ public class SkyModel  {
 	}
 
 
-	public void PopulateStarDictionary(){
+	public void PopulateStarPositionsDictionary(){
 		foreach (StarModel star in stars) {
 			DegreesAngle dec = new DegreesAngle (star.dec);
 			HourAngle ra = new HourAngle (star.ra);
 
 			EquatorialCoords eq = new EquatorialCoords (ra, dec);
 
-			starDictionary [eq] = star.starID - 1;
+			starPositionsDictionary [eq] = star.starID - 1;
+
 		}			
 	}
 
+
+
+	public CelestialBody FindCelestialBody(EquatorialCoords eq){
+		int index = 0;
+
+		//is it a star?
+		if (starPositionsDictionary.TryGetValue(eq, out index)){			
+			return stars [ index ] as StarModel;	
+		}
+
+		//is it a planet?
+		PlanetModel planet = null;
+		foreach(KeyValuePair<string, PlanetModel> current in planets){
+			if(current.Value.equatorialCoords.EqualsThreshold(eq, 5)){
+				planet = current.Value;
+				break;
+			}
+		}		
+		if(planet != null){ 
+			return planet as PlanetModel;
+		}
+
+
+		//is it the moon?
+		if(moon.equatorialCoords.Equals(eq)){
+			return moon as MoonModel;
+		}
+
+		//is it the sun?
+		if (sun.equatorialCoords.Equals (eq)) {
+			return sun as SunModel;
+		}
+
+		return null;
+	}
+
+
+
+	public PlanetModel FindPlanet(EquatorialCoords eq){
+		PlanetModel planet = null;
+		if( planetPositionsDictionary.TryGetValue(eq, out planet) ){
+			return planet;
+		}
+		return null;
+	}
 
 	public StarModel FindStar(EquatorialCoords eq){
 
 		int index = 0;
 
-		if (starDictionary.TryGetValue(eq, out index)){
-			Debug.Log ("index -> "+ index);
+		if (starPositionsDictionary.TryGetValue(eq, out index)){			
 			return stars [ index ];	
 		}
-
-		Debug.Log (eq.ToString());
-		Debug.Log ("index -> "+ index);
 
 		return null;
 	}
@@ -144,10 +197,26 @@ public class SkyModel  {
 
 		//right ascension (alpha) = apparent sidereal time at Greenwich (theta) - Local hour angle (H) - observer's longitude (L, positive west, negative east from Greenwich)
 		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+
 		double ra = theta0Apparent - coords.X - location.longitude / 15d;
 
 		return new EquatorialCoords(new HourAngle(ra), new DegreesAngle( coords.Y ));
 	}
+
+
+	public LocalCoords Equatorial2Horizontal(double ra, double dec){
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+
+		//hour angle in hours
+		double H = theta0Apparent - location.longitude/15d - ra;
+
+		AAS2DCoordinate localCoords = AASCoordinateTransformation.Equatorial2Horizontal (H, dec, location.latitude);
+		double azimuth = AASCoordinateTransformation.MapTo0To360Range (localCoords.X + 180d);
+
+		return new LocalCoords(new DegreesAngle(azimuth), new DegreesAngle(localCoords.Y));
+	}
+
+
 
 	public static LocalCoords Rectangular2Horizontal(double x, double y, double z){
 		double az = Math.Atan2 (x, z) * M.RAD2DEG;

@@ -7,8 +7,15 @@ using MathUtils;
 
 public enum SolarSystemBodyType{ MERCURY, VENUS, MARS, JUPITER, SATURN, URANUS, NEPTUNE, MOON, SUN};
 
+public abstract class CelestialBody{
+	protected int starindex;
 
-public abstract class SolarSystemBody{
+	public int Index{get{return starindex; } set{ starindex = value;} }
+
+}
+
+
+public abstract class SolarSystemBody : CelestialBody {
 	
 
 	public abstract string GetName ();

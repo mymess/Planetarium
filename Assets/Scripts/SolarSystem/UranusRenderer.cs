@@ -3,10 +3,13 @@ using System.Collections;
 
 public class UranusRenderer : PlanetRenderer{
 
+	protected override void Awake(){
+		base.Awake ();
+	}
 
 
 	protected override PlanetModel GetModel ()
 	{
-		return sim.skyModel.GetPlanets () ["Uranus"] as UranusModel;
+		return skyModel.GetPlanets () ["Uranus"] as UranusModel;
 	}
 }

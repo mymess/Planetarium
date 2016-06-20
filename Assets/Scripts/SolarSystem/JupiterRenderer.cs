@@ -4,9 +4,12 @@ using System.Collections;
 public class JupiterRenderer : PlanetRenderer {
 	
 
+	protected override void Awake(){
+		base.Awake ();
+	}
 
 	protected override PlanetModel GetModel ()
 	{
-		return sim.skyModel.GetPlanets()["Jupiter"] as JupiterModel;
+		return skyModel.GetPlanets()["Jupiter"] as JupiterModel;
 	}
 }

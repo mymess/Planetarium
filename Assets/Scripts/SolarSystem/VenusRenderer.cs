@@ -3,8 +3,12 @@ using System.Collections;
 
 public class VenusRenderer : PlanetRenderer  {
 
+	protected override void Awake(){
+		base.Awake ();
+	}
+
 	protected override PlanetModel GetModel ()
 	{
-		return sim.skyModel.GetPlanets ()["Venus"] as VenusModel;
+		return skyModel.GetPlanets ()["Venus"] as VenusModel;
 	}
 }

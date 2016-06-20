@@ -23,14 +23,11 @@ public class SunRenderer : MonoBehaviour {
 
 		sun = sim.skyModel.GetSun();
 
-		float size = 60.0f;//transform.localScale.magnitude;
+		float size = 20.0f;//transform.localScale.magnitude;
 
 		transform.localScale = new Vector3 (size, size, size);
 
 		dirLight = GetComponent<Light> ();
-
-
-
 
 		SetPosition ();
 
