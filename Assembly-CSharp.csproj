@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\ConstellationLinesRenderer.cs" />
      <Compile Include="Assets\Scripts\ConstellationsRenderer.cs" />
      <Compile Include="Assets\Scripts\CoordinatesHUD.cs" />
+     <Compile Include="Assets\Scripts\CrossHairRenderer.cs" />
      <Compile Include="Assets\Scripts\SetSunLight.cs" />
      <Compile Include="Assets\Scripts\Settings\DateTimeSettings.cs" />
      <Compile Include="Assets\Scripts\Settings\GeneralSettings.cs" />

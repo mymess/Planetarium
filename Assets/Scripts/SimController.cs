@@ -21,6 +21,10 @@ public sealed class SimController : MonoBehaviour{
 	public GameObject constellations;
 
 	public Canvas mouseHud;
+	public CoordinatesHUD coordsHud;
+
+	public GameObject crosshair;
+	public CrossHairRenderer crosshairRenderer;
 
 	private static SimController instance = null;
 	public static SimController INSTANCE { get { return instance; }}
@@ -119,6 +123,8 @@ public sealed class SimController : MonoBehaviour{
 		lastJD = dt.JulianDay ();
 
 		UpdateSettings ();
+
+
 	}
 
 	void UpdateSettings(){
@@ -129,16 +135,12 @@ public sealed class SimController : MonoBehaviour{
 		}
 
 		mouseHud.enabled = settings.ShowMouseHud;
-		if(settings.MouseHudChanged){
-			
-		}
-
-
 	}
+
+
 
 	void LateUpdate(){		
 		RotateSkyGlobe ();
-		//UpdateSettings ();
 	}
 		
 

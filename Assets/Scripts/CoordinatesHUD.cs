@@ -14,6 +14,9 @@ public class CoordinatesHUD : MonoBehaviour {
 	private Text fovGUI;
 	private Text detailsGUI;
 
+	public GameObject crosshair;
+	public CrossHairRenderer crosshairRenderer;
+
 	public GameObject raDec;
 	public GameObject azAlt;
 	public GameObject fov;
@@ -59,7 +62,6 @@ public class CoordinatesHUD : MonoBehaviour {
 			DisplaySelectedBodyDetailsIfAny(equatorial);
 
 
-
 			raDecGUI.text = string.Format("RA/Dec: {0} / {1}", equatorial.RA.ToString (), equatorial.Declination.ToString());
 
 			azimuthAltGUI.text = string.Format("Az/Alt: {0} / {1}", local.Azimuth.To0To360Range().ToString (), local.Altitude.ToString());
@@ -76,25 +78,93 @@ public class CoordinatesHUD : MonoBehaviour {
 	}
 
 
-	void DisplaySelectedBodyDetailsIfAny(EquatorialCoords equatorial){
-		if(Input.GetMouseButtonUp(0)){		
-			
-			selectedBody = skyModel.FindCelestialBody(equatorial) as CelestialBody;
+	public void SetHudText(string raDec, string azAlt, string fov){
+		raDecGUI.text = raDec;
+		azimuthAltGUI.text = azAlt;
+		fovGUI.text = fov;
+	}
 
-			if (selectedBody != null) {
-				DisplayBodyDetailsByType ();
-			}			
-		}
 
-		if(selectedBody !=null && sim.dt.playMode){
+	public void SetBodyDetailsText(CelestialBody body){
+		this.selectedBody = body;
+		if( body != null){
 			DisplayBodyDetailsByType ();
 		}
+	}
 
+	void DisplaySelectedBodyDetailsIfAny(EquatorialCoords equatorial){
+		if (Input.GetMouseButtonUp (0)) {
+			//is it a solar system body?
+			if (CheckSolarSystemBodyHit ()) {
+				DisplayBodyDetailsByType ();
+				DisplayCrossHair();
+			} else {
+				//is it a star?
+				selectedBody = skyModel.FindCelestialBody(equatorial);
+				if (selectedBody != null) {
+					DisplayBodyDetailsByType ();
+					DisplayCrossHair();
+				}	
+			}
+		}
+
+		if (selectedBody != null && sim.dt.playMode) {
+			DisplayBodyDetailsByType ();
+			DisplayCrossHair();
+		}
 
 	}
 
+	private bool CheckSolarSystemBodyHit(){		
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+
+		bool ret = false;
+		if (Physics.Raycast (ray, out hit)) {
+			if (hit.rigidbody != null) {
+				ret = true;
+				string bodyTag = hit.rigidbody.transform.tag;
+
+				if (bodyTag.Equals ("Sun")) {
+					selectedBody = skyModel.GetSun();
+				} else if (bodyTag.Equals ("Moon")) {
+					selectedBody = skyModel.GetMoon ();
+				} else if (bodyTag.Equals ("Mercury")) {
+					selectedBody = skyModel.GetPlanets () ["Mercury"];
+				} else if (bodyTag.Equals ("Venus")) {
+					selectedBody = skyModel.GetPlanets () ["Venus"];
+				} else if (bodyTag.Equals ("Mars")) {
+					selectedBody = skyModel.GetPlanets () ["Mars"];
+				} else if (bodyTag.Equals ("Jupiter")) {
+					selectedBody = skyModel.GetPlanets () ["Jupiter"];
+				}else if (bodyTag.Equals ("Saturn")) {
+					selectedBody = skyModel.GetPlanets () ["Saturn"];
+				}else if (bodyTag.Equals ("Uranus")) {
+					selectedBody = skyModel.GetPlanets () ["Uranus"];
+				}else if (bodyTag.Equals ("Neptune")) {
+					selectedBody = skyModel.GetPlanets () ["Neptune"];
+				}
+			}
+		}
+
+		return ret;
+	}
+
+
+
+	private void DisplayCrossHair(){
+		crosshair.SetActive (true);
+		EquatorialCoords eq = GetSelectedBodyEqCoords ();
+		Vec3D rectangular = eq.ToRectangular ();
+		crosshair.transform.localPosition = new Vector3((float)rectangular.x, (float)rectangular.y, -(float)rectangular.z) * sim.radius;
+
+		float fov = Camera.main.fieldOfView;
+		crosshairRenderer.scale = 0.03f*fov*fov+5f;
+
+	}
+
+
 	private void DisplayBodyDetailsByType(){
-		
 
 		if (selectedBody is StarModel) {			
 			detailsGUI.text = GetStarDetails (selectedBody);
@@ -106,6 +176,44 @@ public class CoordinatesHUD : MonoBehaviour {
 			detailsGUI.text = GetMoonDetails (selectedBody);
 		}
 	}
+
+	private EquatorialCoords GetSelectedBodyEqCoords(){
+		EquatorialCoords eq = null;
+		if (selectedBody is StarModel) {			
+			StarModel star =  (StarModel)selectedBody;
+			eq = new EquatorialCoords (new HourAngle(star.ra), new DegreesAngle(star.dec));
+		} else if (selectedBody is PlanetModel) {						
+			PlanetModel planet = (PlanetModel) selectedBody;
+			eq = planet.equatorialCoords;
+		} else if (selectedBody is SunModel) {
+			SunModel sun = (SunModel) selectedBody;
+			eq = sun.equatorialCoords;
+		} else if (selectedBody is MoonModel) {
+			MoonModel moon = (MoonModel)selectedBody;
+			eq = moon.equatorialCoords;
+		} 
+		return eq;
+	}
+
+	private LocalCoords GetSelectedBodyLocalCoords(){
+		LocalCoords local = null;
+		if (selectedBody is StarModel) {			
+			StarModel star =  (StarModel)selectedBody;
+			local = skyModel.Equatorial2Horizontal ((double)star.ra, (double)star.dec);
+
+		} else if (selectedBody is PlanetModel) {						
+			PlanetModel planet = (PlanetModel) selectedBody;
+			local = planet.localCoords;
+		} else if (selectedBody is SunModel) {
+			SunModel sun = (SunModel) selectedBody;
+			local = sun.localCoords;
+		} else if (selectedBody is MoonModel) {
+			MoonModel moon = (MoonModel)selectedBody;
+			local = moon.localCoords;
+		} 
+		return local;
+	}
+
 
 
 	private string GetMoonDetails(CelestialBody body){
