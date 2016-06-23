@@ -13,18 +13,16 @@ public class MoonRenderer : MonoBehaviour {
 	public float scale = 60;
 
 
+
 	void Awake(){
-		
+		sim = SimController.INSTANCE;
+		moon = sim.skyModel.GetMoon();
 	}
 
 
 	// Use this for initialization
 	void Start () {
-
-		sim = SimController.INSTANCE;
-		moon = sim.skyModel.GetMoon();
-
-
+		
 		//transform.rotation.SetLookRotation(Camera.main.transform.position);
 
 		transform.Rotate (new Vector3 (0, 90, 0));
@@ -37,7 +35,12 @@ public class MoonRenderer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {		
+	void Update () {
+
+		if(moon == null){
+			Awake();
+		}
+
 		SetPosition ();
 		SetScale ();
 

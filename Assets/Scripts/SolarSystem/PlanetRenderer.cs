@@ -24,12 +24,14 @@ public abstract class PlanetRenderer : MonoBehaviour {
 		sim = SimController.INSTANCE;
 		skyModel = sim.skyModel;
 
-		distance = .8f * sim.radius;
+		distance = 1.0f * sim.radius;
 		model = GetModel ();
 
 		SetPosition ();
 		SetScale ();
 	}
+		
+
 	
 	// Update is called once per frame
 	void Update () {		

@@ -56,10 +56,13 @@ public sealed class SimController : MonoBehaviour{
 
 
 	void Awake () {		
+		
+
 		if(instance == null){
 			instance = this;
 		}
-		skyModel = new SkyModel((double)dt.JulianDay(), ToLocationData(location));
+		skyModel = new SkyModel((double)dt.JulianDay(), GetLocationData());
+
 	}
 
 	private LocationData ToLocationData(LocationSettings location){
@@ -68,6 +71,12 @@ public sealed class SimController : MonoBehaviour{
 
 
 	void Start(){
+		/*
+		if(instance == null){
+			instance = this;
+		}
+		skyModel = new SkyModel((double)dt.JulianDay(), ToLocationData(location));
+		*/
 		//stars
 		ParseStarsRaw ();
 		ParseConstellations ();
@@ -87,7 +96,7 @@ public sealed class SimController : MonoBehaviour{
 		Debug.Log (string.Format("H {0}", H.ToString() ));
 
 		AAS2DCoordinate local = AASCoordinateTransformation.Equatorial2Horizontal (skyModel.GetSun ().localHourAngle, 
-			skyModel.GetSun().equatorialCoords.Declination.Get(), 
+			skyModel.GetSun().EquatorialCoords.Declination.Get(), 
 			location.Latitude);
 
 
@@ -168,7 +177,7 @@ public sealed class SimController : MonoBehaviour{
 
 
 	public bool IsTimeOrLocationUpdated(){	
-		try{	
+		try{				
 			return lastJD != dt.JulianDay() || !location.Equals (lastLocation);
 		}catch(NullReferenceException n){
 			Debug.Log ("NPE en SiMController");
@@ -278,6 +287,10 @@ public sealed class SimController : MonoBehaviour{
 
 	public LocationSettings GetLocation(){
 		return location;
+	}
+
+	public LocationData GetLocationData(){
+		return ToLocationData (location);
 	}
 		
 

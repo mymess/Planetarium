@@ -8,10 +8,32 @@ using MathUtils;
 public enum SolarSystemBodyType{ MERCURY, VENUS, MARS, JUPITER, SATURN, URANUS, NEPTUNE, MOON, SUN};
 
 public abstract class CelestialBody{
-	protected int starindex;
 
-	public int Index{get{return starindex; } set{ starindex = value;} }
+	protected double jd;
+	protected LocationData location;// = new LocationData(0,0,0);
 
+
+	protected EquatorialCoords equatorialCoords = new EquatorialCoords();
+	public EquatorialCoords EquatorialCoords{ get{ return equatorialCoords; }}
+
+	protected LocalCoords localCoords = new LocalCoords();
+	public LocalCoords LocalCoords{ get{ return localCoords; }}
+
+	public abstract string GetBodyDetails ();
+
+	public LocalCoords GetLocalCoords(){
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
+
+		//hour angle in hours
+		double H = theta0Apparent - location.longitude/15d - equatorialCoords.RA.Get();
+
+		AAS2DCoordinate localCoords = AASCoordinateTransformation.Equatorial2Horizontal (H, 
+			equatorialCoords.Declination.Get(), 
+			location.latitude);
+		double azimuth = AASCoordinateTransformation.MapTo0To360Range (localCoords.X + 180d);
+
+		return new LocalCoords(new DegreesAngle(azimuth), new DegreesAngle(localCoords.Y));
+	}
 }
 
 
@@ -29,16 +51,16 @@ public abstract class SolarSystemBody : CelestialBody {
 	public abstract double GetSemidiameter ();
 
 	//JD
-	protected double jd;
+	//protected double jd;
 
 	//observers location
-	protected LocationData location;
+	//protected LocationData location;
 	protected Vec3D vectorToEarth;
 	protected Vec3D vectorToEarthCorrected;
 
 
-	public EquatorialCoords equatorialCoords = new EquatorialCoords();
-	public LocalCoords localCoords = new LocalCoords();
+	//public EquatorialCoords equatorialCoords = new EquatorialCoords();
+	//public LocalCoords localCoords = new LocalCoords();
 
 	public double localHourAngle;
 

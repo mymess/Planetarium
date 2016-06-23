@@ -238,5 +238,17 @@ public abstract class PlanetModel : SolarSystemBody{
 	}
 
 
+	public override string GetBodyDetails(){
+		string	s = string.Format("{0}\n", GetName().ToUpper() );
+		s += string.Format("Type: {0}\n", "Planet" );
+		s += string.Format("RA/Dec: {0} / {1}\n", equatorialCoords.RA.ToString(), equatorialCoords.Declination.ToString());
+
+		LocalCoords localCoords = GetLocalCoords();
+
+		s += string.Format("Az/Alt: {0} / {1}\n", localCoords.Azimuth.ToString(), localCoords.Altitude.ToString() );
+		s += string.Format("Distance: {0} AU\n", GetDistance() );
+
+		return s;		
+	}
 
 }

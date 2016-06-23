@@ -7,7 +7,7 @@ using MathUtils;
 public class SunModel : SolarSystemBody {
 
 
-	public SunModel(double jd, LocationData location): base(jd, location){			
+	public SunModel(double jd, LocationData location) : base(jd, location){			
 		Update ();	
 	}
 
@@ -95,4 +95,19 @@ public class SunModel : SolarSystemBody {
 	{
 		return AASDiameters.SunSemidiameterA (GetDistance());
 	}
+
+
+	public override string GetBodyDetails(){
+		string s = string.Format("{0}\n", "SUN" );
+		s += string.Format("Type: {0}\n", "Star" );
+		s += string.Format("RA/Dec: {0} / {1}\n", equatorialCoords.RA.ToString(), equatorialCoords.Declination.ToString());
+
+		LocalCoords localCoords = GetLocalCoords();
+
+		s += string.Format("Az/Alt: {0} / {1}\n", localCoords.Azimuth.ToString(), localCoords.Altitude.ToString() );
+		s += string.Format("Distance: {0} AU\n", GetDistance() );
+
+		return s;
+	}
+
 }

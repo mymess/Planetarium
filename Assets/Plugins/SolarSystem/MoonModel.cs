@@ -7,7 +7,7 @@ using MathUtils;
 public class MoonModel : SolarSystemBody {
 
 
-	public MoonModel(double jd, LocationData location): base (jd, location) {		
+	public MoonModel(double jd, LocationData location) : base (jd, location) {		
 		Update ();
 	}
 
@@ -59,5 +59,16 @@ public class MoonModel : SolarSystemBody {
 			location.altitude);
 	}
 
+	public override string GetBodyDetails(){
+		string s = string.Format("{0}\n", "MOON" );
 
+		s += string.Format("RA/Dec: {0} / {1}\n", equatorialCoords.RA.ToString(), equatorialCoords.Declination.ToString());
+
+		LocalCoords localCoords = GetLocalCoords();
+
+		s += string.Format("Az/Alt: {0} / {1}\n", localCoords.Azimuth.ToString(), localCoords.Altitude.ToString() );
+		s += string.Format("Distance: {0} km\n", GetDistance() );
+
+		return s;
+	}
 }

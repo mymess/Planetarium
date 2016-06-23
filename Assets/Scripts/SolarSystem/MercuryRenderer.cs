@@ -9,6 +9,9 @@ public class MercuryRenderer : PlanetRenderer{
 
 	protected override PlanetModel GetModel ()
 	{
+		if (skyModel == null) {
+			Awake ();
+		}
 		return skyModel.GetPlanets()["Mercury"] as MercuryModel;
 	}
 

@@ -64,10 +64,6 @@ public class StarModel : CelestialBody{
 	public double vy;
 	public double vz;
 
-	//local coords
-	public double az;
-	public double alt;
-
 	public StarModel(string[] data){
 		try{
 			int len = data.Length;
@@ -85,6 +81,8 @@ public class StarModel : CelestialBody{
 			float.TryParse(data[Star.ColorIndex], out colorIndex);
 
 			spectrum = data[Star.Spectrum];
+
+			equatorialCoords = new EquatorialCoords(new HourAngle(ra), new DegreesAngle(dec));
 
 		}catch(FormatException pe){
 			Debug.Log (string.Format("EXCEPTION: {0}", pe.ToString()));
@@ -116,7 +114,18 @@ public class StarModel : CelestialBody{
 		//return new Vector3 ((float)x, (float) y, (float) z);
 		return new Vector3 (x, y, z);
 	}
+	/*
+	public LocalCoords LocalCoords(double jd, LocationData location){
+		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
 
+		//hour angle in hours
+		double H = theta0Apparent - location.longitude/15d - ra;
+
+		AAS2DCoordinate localCoords = AASCoordinateTransformation.Equatorial2Horizontal (H, dec, location.latitude);
+		double azimuth = AASCoordinateTransformation.MapTo0To360Range (localCoords.X + 180d);
+
+		return new LocalCoords(new DegreesAngle(azimuth), new DegreesAngle(localCoords.Y));
+	}*/
 
 	public Vector3 GetLocalRectangularCoordinates(double jd, LocationData location){
 		double theta0Apparent = AASSidereal.ApparentGreenwichSiderealTime (jd);
@@ -168,6 +177,41 @@ public class StarModel : CelestialBody{
 		}
 
 		return new Color(red, green, blue);
+	}
+
+
+	public void Update(double jd, LocationData location){
+		this.jd = jd;
+		this.location = location;
+
+		this.localCoords = GetLocalCoords ();
+	}
+
+	public override string GetBodyDetails(){
+		string s = string.Format("Type: STAR\n");
+
+		if (!string.IsNullOrEmpty (properName.Trim())) {
+			s += string.Format("Name: {0}\n", properName);
+		}
+		s += string.Format("Hipparcos catalogue: {0}\n", hip);
+
+		if(!string.IsNullOrEmpty (bayerFlamsteed.Trim())){
+			s += string.Format("Bayer-Flamsteed catalogue: {0}\n", bayerFlamsteed);
+		}
+		if (!string.IsNullOrEmpty (gliese.Trim())) {
+			s += string.Format("Gliese catalogue: {0}\n", gliese );
+		}
+
+
+		s += string.Format("RA/Dec: {0} / {1}\n", equatorialCoords.RA.ToString(), equatorialCoords.Declination.ToString());
+
+		this.localCoords = GetLocalCoords ();
+		s += string.Format("Az/Alt: {0} / {1}\n", localCoords.Azimuth.ToString(), localCoords.Altitude.ToString() );
+		s += string.Format("Spectrum: {0}\n", spectrum );
+		s += string.Format("Color index: {0}\n", colorIndex );
+		s += string.Format("Distance: {0} light-years\n", distance.ToString("##.000") );
+
+		return s;
 	}
 }
 

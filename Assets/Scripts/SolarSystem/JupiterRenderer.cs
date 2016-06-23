@@ -10,6 +10,9 @@ public class JupiterRenderer : PlanetRenderer {
 
 	protected override PlanetModel GetModel ()
 	{
+		if (skyModel == null) {
+			Awake ();
+		}
 		return skyModel.GetPlanets()["Jupiter"] as JupiterModel;
 	}
 }

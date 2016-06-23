@@ -10,7 +10,10 @@ public class MarsRenderer : PlanetRenderer
 
 	protected override PlanetModel GetModel ()
 	{
-		return SimController.INSTANCE.skyModel.GetPlanets()["Mars"] as MarsModel;
+		if (skyModel == null) {
+			Awake ();
+		}
+		return skyModel.GetPlanets()["Mars"] as MarsModel;
 	}
 
 }

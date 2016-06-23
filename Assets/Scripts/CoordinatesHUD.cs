@@ -16,6 +16,8 @@ public class CoordinatesHUD : MonoBehaviour {
 
 	public GameObject crosshair;
 	public CrossHairRenderer crosshairRenderer;
+	private float crosshairRadius;
+	private float crosshairSize;
 
 	public GameObject raDec;
 	public GameObject azAlt;
@@ -40,6 +42,8 @@ public class CoordinatesHUD : MonoBehaviour {
 		skyModel = SimController.INSTANCE.skyModel;
 		sim = SimController.INSTANCE;
 		raDecGUI.color = azimuthAltGUI.color = fovGUI.color = sim.Settings.MouseHudColor;
+
+		detailsGUI.text = "";
 	}
 	
 	// Update is called once per frame
@@ -87,7 +91,7 @@ public class CoordinatesHUD : MonoBehaviour {
 
 	public void SetBodyDetailsText(CelestialBody body){
 		this.selectedBody = body;
-		if( body != null){
+		if( body != null ){
 			DisplayBodyDetailsByType ();
 		}
 	}
@@ -100,15 +104,22 @@ public class CoordinatesHUD : MonoBehaviour {
 				DisplayCrossHair();
 			} else {
 				//is it a star?
-				selectedBody = skyModel.FindCelestialBody(equatorial);
-				if (selectedBody != null) {
+				selectedBody = skyModel.FindStar(equatorial);
+				if (selectedBody != null) {		
+					StarModel star = (StarModel)selectedBody;
+					crosshairRadius = 5f;
+					crosshairSize = 50 / (3 + star.mag);
+
 					DisplayBodyDetailsByType ();
-					DisplayCrossHair();
-				}	
+					DisplayCrossHair ();
+				} else {
+					crosshair.SetActive (false);
+					detailsGUI.text = "";
+				}
 			}
 		}
 
-		if (selectedBody != null && sim.dt.playMode) {
+		if (selectedBody != null) {			
 			DisplayBodyDetailsByType ();
 			DisplayCrossHair();
 		}
@@ -121,9 +132,9 @@ public class CoordinatesHUD : MonoBehaviour {
 
 		bool ret = false;
 		if (Physics.Raycast (ray, out hit)) {
-			if (hit.rigidbody != null) {
+			if (hit.collider != null) {
 				ret = true;
-				string bodyTag = hit.rigidbody.transform.tag;
+				string bodyTag = hit.transform.tag;
 
 				if (bodyTag.Equals ("Sun")) {
 					selectedBody = skyModel.GetSun();
@@ -144,6 +155,11 @@ public class CoordinatesHUD : MonoBehaviour {
 				}else if (bodyTag.Equals ("Neptune")) {
 					selectedBody = skyModel.GetPlanets () ["Neptune"];
 				}
+
+				crosshairRadius = hit.collider.transform.localScale.magnitude;
+				crosshairSize = hit.collider.transform.localScale.magnitude;
+
+
 			}
 		}
 
@@ -158,64 +174,42 @@ public class CoordinatesHUD : MonoBehaviour {
 		Vec3D rectangular = eq.ToRectangular ();
 		crosshair.transform.localPosition = new Vector3((float)rectangular.x, (float)rectangular.y, -(float)rectangular.z) * sim.radius;
 
+
 		float fov = Camera.main.fieldOfView;
 		crosshairRenderer.scale = 0.03f*fov*fov+5f;
-
+		crosshairRenderer.radius = crosshairRadius;
+		crosshairRenderer.sizeOnScreen = crosshairSize;
 	}
 
 
 	private void DisplayBodyDetailsByType(){
+		if(selectedBody != null){
+			if (selectedBody is StarModel) {
+				StarModel star = (StarModel)selectedBody;
+				star.Update ((double)sim.dt.JulianDay (), sim.GetLocationData ());
+				detailsGUI.text = star.GetBodyDetails ();
 
-		if (selectedBody is StarModel) {			
-			detailsGUI.text = GetStarDetails (selectedBody);
-		} else if (selectedBody is PlanetModel) {						
-			detailsGUI.text = GetPlanetDetails (selectedBody);
-		} else if ( selectedBody is SunModel) {
-			detailsGUI.text = GetSunDetails (selectedBody);
-		} else if (selectedBody is MoonModel) {
-			detailsGUI.text = GetMoonDetails (selectedBody);
-		}
+			} else {
+				detailsGUI.text = selectedBody.GetBodyDetails ();
+			}
+		}	
 	}
 
-	private EquatorialCoords GetSelectedBodyEqCoords(){
-		EquatorialCoords eq = null;
-		if (selectedBody is StarModel) {			
-			StarModel star =  (StarModel)selectedBody;
-			eq = new EquatorialCoords (new HourAngle(star.ra), new DegreesAngle(star.dec));
-		} else if (selectedBody is PlanetModel) {						
-			PlanetModel planet = (PlanetModel) selectedBody;
-			eq = planet.equatorialCoords;
-		} else if (selectedBody is SunModel) {
-			SunModel sun = (SunModel) selectedBody;
-			eq = sun.equatorialCoords;
-		} else if (selectedBody is MoonModel) {
-			MoonModel moon = (MoonModel)selectedBody;
-			eq = moon.equatorialCoords;
-		} 
-		return eq;
+	private EquatorialCoords GetSelectedBodyEqCoords(){		
+		return selectedBody.EquatorialCoords;
 	}
 
 	private LocalCoords GetSelectedBodyLocalCoords(){
-		LocalCoords local = null;
 		if (selectedBody is StarModel) {			
-			StarModel star =  (StarModel)selectedBody;
-			local = skyModel.Equatorial2Horizontal ((double)star.ra, (double)star.dec);
-
-		} else if (selectedBody is PlanetModel) {						
-			PlanetModel planet = (PlanetModel) selectedBody;
-			local = planet.localCoords;
-		} else if (selectedBody is SunModel) {
-			SunModel sun = (SunModel) selectedBody;
-			local = sun.localCoords;
-		} else if (selectedBody is MoonModel) {
-			MoonModel moon = (MoonModel)selectedBody;
-			local = moon.localCoords;
-		} 
-		return local;
+			StarModel star = (StarModel)selectedBody;
+			star.Update ((double)sim.GetJD (), sim.GetLocationData ());
+			return star.GetLocalCoords ();
+		}
+		return selectedBody.GetLocalCoords ();
 	}
 
 
-
+	/*
 	private string GetMoonDetails(CelestialBody body){
 		MoonModel moon = null;
 		string s = "";
@@ -225,7 +219,7 @@ public class CoordinatesHUD : MonoBehaviour {
 
 			s = string.Format("{0}\n", "MOON" );
 			//s += string.Format("Type: {0}\n", "Moon" );
-			s += string.Format("RA/Dec: {0} / {1}\n", moon.equatorialCoords.RA.ToString(), moon.equatorialCoords.Declination.ToString());
+			s += string.Format("RA/Dec: {0} / {1}\n", moon.EquatorialCoords.RA.ToString(), moon.EquatorialCoords.Declination.ToString());
 
 			LocalCoords localCoords = skyModel.Equatorial2Horizontal (moon.equatorialCoords.RA.Get (), moon.equatorialCoords.Declination.Get ());
 
@@ -334,6 +328,7 @@ public class CoordinatesHUD : MonoBehaviour {
 		return s;
 	}
 
+	*/
 
 
 }

@@ -136,7 +136,7 @@ public class SkyModel  {
 		//is it a planet?
 		PlanetModel planet = null;
 		foreach(KeyValuePair<string, PlanetModel> current in planets){
-			if(current.Value.equatorialCoords.EqualsThreshold(eq, 5)){
+			if(current.Value.EquatorialCoords.EqualsThreshold(eq, 5)){
 				planet = current.Value;
 				break;
 			}
@@ -147,12 +147,12 @@ public class SkyModel  {
 
 
 		//is it the moon?
-		if(moon.equatorialCoords.Equals(eq)){
+		if(moon.EquatorialCoords.Equals(eq)){
 			return moon as MoonModel;
 		}
 
 		//is it the sun?
-		if (sun.equatorialCoords.Equals (eq)) {
+		if (sun.EquatorialCoords.Equals (eq)) {
 			return sun as SunModel;
 		}
 
