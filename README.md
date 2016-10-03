@@ -23,8 +23,6 @@ I expect to publish it as a Unity asset and/or standalone application.
 
 <img width="1862" alt="captura de pantalla 2016-06-01 a las 17 30 16" src="https://cloud.githubusercontent.com/assets/15065645/19045850/2018ca5e-899b-11e6-80dd-c695fa565a9c.png">
 
-<img width="1259" alt="captura de pantalla 2016-06-02 a las 12 59 15" src="https://cloud.githubusercontent.com/assets/15065645/15743776/163c0926-28c8-11e6-810f-c14ab66971b3.png">
-
 
 <img width="1259" alt="captura de pantalla 2016-06-02 a las 12 59 15" src="https://cloud.githubusercontent.com/assets/15065645/19045856/259508ee-899b-11e6-8ad3-905311b23de0.png">
 
