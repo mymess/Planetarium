@@ -1,10 +1,10 @@
-#Planetarium 
+# Planetarium 
 
-##A Unity 3D made Planetarium. 
+## A Unity 3D made Planetarium. 
 The project's goal is to be able to watch the stars, sun, moon, planets and deep space objects using VR goggles.
 I expect to publish it as a Unity asset and/or standalone application.
 
-###Goal features:
+### Goal features:
 1. Physical atmosphere
 2. Object picking + popup display
 3. Location + Date/Time + settings dialogs
@@ -16,7 +16,7 @@ I expect to publish it as a Unity asset and/or standalone application.
 
 
 
-###Some pics:
+### Some pics:
 
 
 <img width="1253" alt="captura de pantalla 2016-06-02 a las 12 46 18" src="https://cloud.githubusercontent.com/assets/15065645/19045846/1d6082b6-899b-11e6-8b2c-0aed0dd55b38.png">
